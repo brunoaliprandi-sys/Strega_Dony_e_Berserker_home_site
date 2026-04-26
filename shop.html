@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Online — Strega Dony e il Berserker</title>
+    <meta name="description" content="Acquista le miniature ufficiali di Strega Dony e il Berserker. Edizione limitata — Coming Soon.">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* ── SHOP PAGE ─────────────────────────────────────── */
+        .shop-hero {
+            text-align: center;
+            padding: 7rem 2rem 4rem;
+            position: relative;
+        }
+
+        .shop-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(139,0,0,0.22) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 40% at 80% 100%, rgba(200,168,75,0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .shop-hero-inner { position: relative; z-index: 1; }
+
+        .shop-hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.4rem, 5vw, 4.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--text-bright);
+            text-shadow: 0 0 50px var(--blood-glow);
+            margin-bottom: 1rem;
+        }
+
+        .shop-hero h1 span { color: var(--blood-bright); }
+
+        .shop-hero p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            font-weight: 300;
+            max-width: 580px;
+            margin: 0 auto 0.5rem;
+            line-height: 1.8;
+        }
+
+        /* ── CONTAINER ─────────────────────────────────────── */
+        .shop-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 2rem 8rem;
+        }
+
+        /* ── PRODUCTS GRID ─────────────────────────────────── */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        /* ── PRODUCT CARD ──────────────────────────────────── */
+        .product-card {
+            background: rgba(10, 8, 14, 0.88);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(18px);
+            transition: transform 0.45s cubic-bezier(.2,.9,.3,1.1), box-shadow 0.45s, border-color 0.4s;
+            animation: fadeUp 0.7s cubic-bezier(.2,.9,.3,1.1) forwards;
+            opacity: 0;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.25s; }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--blood-bright), var(--accent-gold), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-14px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 50px rgba(139,0,0,0.18);
+            border-color: rgba(192,57,43,0.35);
+        }
+
+        .product-card:hover::before { opacity: 1; }
+
+        /* ── IMAGE AREA ────────────────────────────────────── */
+        .product-image-wrap {
+            position: relative;
+            height: 420px;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 60%, rgba(139,0,0,0.12) 0%, rgba(0,0,0,0.9) 100%);
+        }
+
+        .product-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            filter: saturate(0.85) brightness(0.92);
+            transition: transform 0.65s cubic-bezier(.2,.9,.3,1.2), filter 0.5s;
+        }
+
+        .product-card:hover .product-image-wrap img {
+            transform: scale(1.07);
+            filter: saturate(1) brightness(1);
+        }
+
+        /* Bottom gradient overlay on image */
+        .product-image-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 45%;
+            background: linear-gradient(to top, rgba(10,8,14,1) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        /* ── COMING SOON BADGE ─────────────────────────────── */
+        .coming-soon-badge {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: linear-gradient(135deg, var(--blood-red), #5c0000);
+            color: var(--text-bright);
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 0.45rem 1.1rem;
+            border-radius: 3px;
+            border: 1px solid rgba(192,57,43,0.6);
+            box-shadow: 0 0 20px rgba(139,0,0,0.6), 0 4px 12px rgba(0,0,0,0.5);
+            animation: badge-glow 2.5s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes badge-glow {
+            0%,100% { box-shadow: 0 0 14px rgba(192,57,43,0.5), 0 4px 12px rgba(0,0,0,0.5); }
+            50%      { box-shadow: 0 0 28px rgba(192,57,43,0.9), 0 4px 16px rgba(0,0,0,0.6); }
+        }
+
+        /* ── IMAGE GALLERY SWITCHER ──────────────────────── */
+        .img-gallery { position: relative; width: 100%; height: 100%; }
+
+        .img-gallery img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            filter: saturate(0.85) brightness(0.92);
+            transition: opacity 0.55s ease, transform 0.65s cubic-bezier(.2,.9,.3,1.2), filter 0.5s;
+            opacity: 0;
+        }
+
+        .img-gallery img.active { opacity: 1; }
+        .product-card:hover .img-gallery img.active {
+            transform: scale(1.07);
+            filter: saturate(1) brightness(1);
+        }
+
+        /* Thumbnail strip */
+        .product-thumbs {
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 4;
+        }
+
+        .thumb-btn {
+            width: 52px;
+            height: 38px;
+            border-radius: 4px;
+            border: 2px solid rgba(255,255,255,0.15);
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.3s, transform 0.25s;
+            background: #000;
+            padding: 0;
+        }
+
+        .thumb-btn img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+        }
+
+        .thumb-btn.active { border-color: var(--blood-bright); transform: scale(1.1); }
+        .thumb-btn:hover { border-color: rgba(192,57,43,0.6); }
+
+        /* ── PRODUCT INFO ──────────────────────────────────── */
+        .product-info {
+            padding: 1.8rem 2rem 2.2rem;
+        }
+
+        .product-edition {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 0.7rem;
+            opacity: 0.85;
+        }
+
+        .product-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.9rem;
+            font-weight: 900;
+            color: var(--text-bright);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .product-subtitle {
+            color: var(--blood-bright);
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+        }
+
+        .product-desc {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            font-weight: 300;
+            line-height: 1.75;
+            margin-bottom: 1.6rem;
+        }
+
+        /* ── SPECS LIST ────────────────────────────────────── */
+        .product-specs {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.55rem 1rem;
+            margin-bottom: 2rem;
+            padding: 1.2rem;
+            background: rgba(0,0,0,0.35);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .product-specs li {
+            font-size: 0.85rem;
+            color: var(--bone);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .product-specs li::before {
+            content: '◆';
+            font-size: 0.45rem;
+            color: var(--blood-bright);
+            flex-shrink: 0;
+        }
+
+        /* ── PRICE & PAYPAL ────────────────────────────────── */
+        .product-price-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-price {
+            font-family: 'Cinzel', serif;
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px rgba(200,168,75,0.4);
+            line-height: 1;
+        }
+
+        .product-price-label {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        /* PayPal button wrapper */
+        .paypal-btn-wrap {
+            width: 100%;
+        }
+
+        .paypal-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 1.1rem 2rem;
+            background: linear-gradient(135deg, #003087 0%, #009cde 100%);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 6px;
+            cursor: not-allowed;
+            position: relative;
+            overflow: hidden;
+            transition: opacity 0.3s, transform 0.3s;
+            opacity: 0.72;
+            text-decoration: none;
+        }
+
+        .paypal-btn .paypal-logo {
+            font-size: 1.3rem;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: -1px;
+        }
+
+        .paypal-btn .paypal-logo .pp-blue  { color: #009cde; }
+        .paypal-btn .paypal-logo .pp-dark  { color: #001c64; }
+
+        .paypal-btn .coming-soon-text {
+            font-size: 0.78rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.85;
+        }
+
+        /* Lock icon overlay */
+        .paypal-btn::after {
+            content: '🔒 COMING SOON';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            font-weight: 700;
+            background: rgba(0,0,0,0.55);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .paypal-btn:hover::after { opacity: 1; }
+
+        .notify-link {
+            display: block;
+            text-align: center;
+            margin-top: 0.9rem;
+            color: var(--text-dim);
+            font-size: 0.82rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .notify-link:hover { color: var(--blood-bright); }
+
+        /* ── DIVIDER ───────────────────────────────────────── */
+        .section-divider {
+            text-align: center;
+            margin: 5rem 0 3rem;
+            position: relative;
+        }
+
+        .section-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139,0,0,0.4), rgba(200,168,75,0.3), rgba(139,0,0,0.4), transparent);
+        }
+
+        .section-divider span {
+            position: relative;
+            background: var(--bg-void);
+            padding: 0 2rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* ── INFO BAND ─────────────────────────────────────── */
+        .info-band {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 4rem;
+        }
+
+        .info-band-cell {
+            background: rgba(8,6,12,0.85);
+            padding: 2.2rem 1.5rem;
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        .info-band-cell:hover { background: rgba(15,8,12,0.95); }
+
+        .info-band-icon { font-size: 2rem; display: block; margin-bottom: 0.8rem; }
+
+        .info-band-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--text-bright);
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .info-band-desc {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            font-weight: 300;
+            line-height: 1.65;
+        }
+
+        /* ── RESPONSIVE ────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .products-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .product-specs { grid-template-columns: 1fr; }
+            .info-band { grid-template-columns: 1fr; }
+            .product-price { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAV ──────────────────────────────────────────────── -->
+    <nav>
+        <a href="index.html" class="nav-brand">
+            <span class="skull">☠</span>
+            <span class="brand-red">STREGA DONY</span>
+            <span class="brand-amp">&amp;</span>
+            BERSERKER
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Il Gioco</a>
+            <a href="compendio.html">Wiki NPC</a>
+            <a href="oggetti.html">Oggetti &amp; Armi</a>
+            <a href="mappe.html">Mappe</a>
+            <a href="video.html">Video</a>
+            <a href="ideatori.html">Ideatori</a>
+            <a href="wallpapers.html">Wallpapers</a>
+            <a href="shop.html" class="active">Shop</a>
+        </div>
+    </nav>
+
+    <!-- ── DRIP BAR ───────────────────────────────────────── -->
+    <div class="drip-bar">
+        <svg viewBox="0 0 1440 50" preserveAspectRatio="none">
+            <path d="M0,0 L1440,0 L1440,20 Q1200,50 960,30 Q720,10 480,35 Q240,55 0,25 Z" fill="#8b0000"/>
+        </svg>
+    </div>
+
+    <!-- ── HERO ───────────────────────────────────────────── -->
+    <section class="shop-hero">
+        <div class="shop-hero-inner">
+            <div class="section-badge">☠ Mercato delle Anime ☠</div>
+            <h1>Shop <span>Online</span></h1>
+            <p>Porta a casa i protagonisti dell'oscurità.<br>Miniature artigianali in edizione limitata, pronte a infestare la tua scrivania.</p>
+        </div>
+    </section>
+
+    <!-- ── SHOP CONTENT ───────────────────────────────────── -->
+    <main class="shop-container">
+
+        <div class="products-grid">
+
+            <!-- ══ PRODUCT 1: STREGA DONY ══ -->
+            <article class="product-card" id="miniatura-dony">
+                <div class="product-image-wrap">
+                    <div class="img-gallery" id="gallery-dony">
+                        <img src="shoponline/Miniatura_Dony.png" alt="Miniatura Strega Dony" class="active">
+                        <img src="shoponline/Miniatura_Dony_in_game.png" alt="Strega Dony In-Game">
+                    </div>
+                    <span class="coming-soon-badge">⚰ Coming Soon</span>
+                    <div class="product-thumbs">
+                        <button class="thumb-btn active" onclick="switchImg('gallery-dony',0,this)" title="Miniatura">
+                            <img src="shoponline/Miniatura_Dony.png" alt="">
+                        </button>
+                        <button class="thumb-btn" onclick="switchImg('gallery-dony',1,this)" title="In-Game">
+                            <img src="shoponline/Miniatura_Dony_in_game.png" alt="">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <span class="product-edition">☽ Edizione Limitata — N.1</span>
+                    <h2 class="product-name">Strega Dony</h2>
+                    <div class="product-subtitle">Miniatura da Collezione — Resina</div>
+                    <p class="product-desc">
+                        La sciamana dell'oscurità prende forma in una miniatura artigianale di alta qualità. Ogni dettaglio del suo mantello, dei suoi grimori e del suo sguardo penetrante è plasmato con cura ossessiva. Un pezzo unico per collezionisti del genere horror-fantasy.
+                    </p>
+                    <ul class="product-specs">
+                        <li>Resina di qualità premium</li>
+                        <li>Alta 4 cm</li>
+                        <li>Base scenografica inclusa</li>
+                        <li>Edizione limitata numerata</li>
+                        <li>Certificato di autenticità</li>
+                    </ul>
+
+                    <div class="product-price-row">
+                        <div>
+                            <div class="product-price-label">Prezzo</div>
+                            <div class="product-price">€ 14,00</div>
+                        </div>
+                        <div style="color:var(--text-dim); font-size:0.82rem; letter-spacing:1px; margin-bottom:4px;">+ spedizione</div>
+                    </div>
+
+                    <div class="paypal-btn-wrap">
+                        <a href="#" class="paypal-btn" onclick="return false;" aria-disabled="true" tabindex="-1">
+                            <span class="paypal-logo">
+                                <span class="pp-dark">Pay</span><span class="pp-blue">Pal</span>
+                            </span>
+                            <span class="coming-soon-text">Paga con PayPal</span>
+                        </a>
+                        <a href="#notify" class="notify-link">🔔 Pre-ordina via email</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ══ PRODUCT 2: IL BERSERKER ══ -->
+            <article class="product-card" id="miniatura-berserker">
+                <div class="product-image-wrap">
+                    <div class="img-gallery" id="gallery-berserker">
+                        <img src="shoponline/Miniatura_Berseker.png" alt="Miniatura Il Berserker" class="active">
+                        <img src="shoponline/Miniatura_Berseker_in_game.png" alt="Il Berserker In-Game">
+                    </div>
+                    <span class="coming-soon-badge">⚰ Coming Soon</span>
+                    <div class="product-thumbs">
+                        <button class="thumb-btn active" onclick="switchImg('gallery-berserker',0,this)" title="Miniatura">
+                            <img src="shoponline/Miniatura_Berseker.png" alt="">
+                        </button>
+                        <button class="thumb-btn" onclick="switchImg('gallery-berserker',1,this)" title="In-Game">
+                            <img src="shoponline/Miniatura_Berseker_in_game.png" alt="">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <span class="product-edition">🗡 Edizione Limitata — N.2</span>
+                    <h2 class="product-name">Il Berserker</h2>
+                    <div class="product-subtitle">Miniatura da Collezione — Resina</div>
+                    <p class="product-desc">
+                        Il guerriero folle, la furia incarnata. La miniatura del Berserker cattura ogni muscolo teso per la battaglia, la Spada delle Anime impugnata con mano ferrea. Un pezzo massiccio e imponente che domina qualsiasi vetrina o tavolo da gioco.
+                    </p>
+                    <ul class="product-specs">
+                        <li>Resina di qualità premium</li>
+                        <li>Alta 4 cm</li>
+                        <li>Base scenografica inclusa</li>
+                        <li>Edizione limitata numerata</li>
+                        <li>Certificato di autenticità</li>
+                    </ul>
+
+                    <div class="product-price-row">
+                        <div>
+                            <div class="product-price-label">Prezzo</div>
+                            <div class="product-price">€ 14,00</div>
+                        </div>
+                        <div style="color:var(--text-dim); font-size:0.82rem; letter-spacing:1px; margin-bottom:4px;">+ spedizione</div>
+                    </div>
+
+                    <div class="paypal-btn-wrap">
+                        <a href="#" class="paypal-btn" onclick="return false;" aria-disabled="true" tabindex="-1">
+                            <span class="paypal-logo">
+                                <span class="pp-dark">Pay</span><span class="pp-blue">Pal</span>
+                            </span>
+                            <span class="coming-soon-text">Paga con PayPal</span>
+                        </a>
+                        <a href="#notify" class="notify-link">🔔 Pre-ordina via email</a>
+                    </div>
+                </div>
+            </article>
+
+        </div><!-- /products-grid -->
+
+        <!-- ── INFO SECTION ──────────────────────────────── -->
+        <div class="section-divider"><span>Il nostro impegno</span></div>
+
+        <div class="info-band">
+            <div class="info-band-cell">
+                <span class="info-band-icon">🖌️</span>
+                <div class="info-band-title">Artigianato Puro</div>
+                <p class="info-band-desc">Ogni miniatura è dipinta a mano da artisti specializzati. Nessun pezzo identico all'altro.</p>
+            </div>
+            <div class="info-band-cell">
+                <span class="info-band-icon">📦</span>
+                <div class="info-band-title">Spedizione Sicura</div>
+                <p class="info-band-desc">Imballaggio personalizzato anti-urto con tracking internazionale incluso in ogni ordine.</p>
+            </div>
+            <div class="info-band-cell">
+                <span class="info-band-icon">🔐</span>
+                <div class="info-band-title">Pagamento Sicuro</div>
+                <p class="info-band-desc">Transazioni protette tramite PayPal. I tuoi dati non vengono mai memorizzati sul nostro server.</p>
+            </div>
+        </div>
+
+        <!-- ── PREORDER SECTION ───────────────────────────── -->
+        <div id="notify" style="margin-top:5rem; text-align:center; padding: 4rem 2rem; border: 1px solid rgba(139,0,0,0.25); border-radius: 10px; background: rgba(10,4,4,0.7); backdrop-filter: blur(12px);">
+            <div class="section-badge" style="margin-bottom:1.5rem;">☠ Pre-Order ☠</div>
+            <h2 style="font-family:'Cinzel',serif; font-size:2rem; color:var(--text-bright); margin-bottom:1rem; letter-spacing:2px;">Vuoi pre-ordinare?</h2>
+            <p style="color:var(--text-dim); max-width:520px; margin: 0 auto 0.8rem; font-weight:300; line-height:1.85;">
+                Le miniature sono attualmente in fase di produzione. Per riservare il tuo pezzo in anticipo, scrivi direttamente all'autore.
+            </p>
+            <p style="color:var(--text-dim); max-width:520px; margin: 0 auto 2.5rem; font-weight:300; line-height:1.85;">
+                Indica nella mail <strong style="color:var(--bone);">quale miniatura</strong> desideri, il tuo <strong style="color:var(--bone);">nome e indirizzo</strong> per la spedizione. Riceverai conferma e istruzioni per il pagamento via PayPal.
+            </p>
+            <a
+                href="mailto:brunoaliprandi@gmail.com?subject=Pre-ordine%20Miniatura%20Strega%20Dony%20%2F%20Berserker&body=Salve%2C%20vorrei%20pre-ordinare%20la%20seguente%20miniatura%3A%0A%0ANome%3A%20%0AIndirizzo%3A%20%0AMiniatura%3A%20Dony%20%2F%20Berserker%20(cancellare%20l%E2%80%99altra)"
+                style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 12px;
+                    background: var(--blood-red);
+                    color: var(--text-bright);
+                    text-decoration: none;
+                    padding: 1.1rem 2.8rem;
+                    border-radius: 5px;
+                    font-family: 'Cinzel', serif;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    letter-spacing: 3px;
+                    text-transform: uppercase;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    transition: background 0.3s, transform 0.25s, box-shadow 0.3s;
+                    position: relative;
+                    overflow: hidden;
+                "
+                onmouseover="this.style.background='var(--blood-bright)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 0 30px rgba(192,57,43,0.5)'"
+                onmouseout="this.style.background='var(--blood-red)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+            >
+                ✉ Scrivi per il Pre-Order
+            </a>
+            <p style="margin-top:1.5rem; color:var(--text-dim); font-size:0.82rem; letter-spacing:1.5px;">
+                📧 <a href="mailto:brunoaliprandi@gmail.com" style="color:var(--accent-gold); text-decoration:none;">brunoaliprandi@gmail.com</a>
+            </p>
+        </div>
+
+    </main><!-- /shop-container -->
+
+    <script>
+        function switchImg(galleryId, idx, btn) {
+            const gallery = document.getElementById(galleryId);
+            const imgs = gallery.querySelectorAll('img');
+            imgs.forEach((img, i) => img.classList.toggle('active', i === idx));
+            // update thumb buttons
+            const thumbs = btn.closest('.product-image-wrap').querySelectorAll('.thumb-btn');
+            thumbs.forEach((t, i) => t.classList.toggle('active', i === idx));
+        }
+    </script>
+
+</body>
+</html>
