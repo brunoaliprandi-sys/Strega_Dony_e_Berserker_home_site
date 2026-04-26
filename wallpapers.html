@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallpapers — Strega Dony e il Berserker</title>
+    <meta name="description" content="Scarica gli sfondi esclusivi di Strega Dony e il Berserker dell'Occulto.">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 2rem 6rem; }
+        
+        header {
+            text-align: center;
+            padding: 5rem 2rem 3rem;
+            background: linear-gradient(to bottom, rgba(139,0,0,0.08), var(--bg-void));
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            margin-bottom: 4rem;
+        }
+
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            color: var(--text-bright);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 40px var(--blood-glow);
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 1rem auto 0;
+        }
+
+        .wallpaper-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .wp-card {
+            background: rgba(10, 8, 12, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 6px;
+            overflow: hidden;
+            transition: transform 0.4s, box-shadow 0.4s, border-color 0.4s;
+            display: flex;
+            flex-direction: column;
+            animation: fadeUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .wp-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 30px rgba(139,0,0,0.2);
+            border-color: rgba(192,57,43,0.4);
+        }
+
+        .wp-image {
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 */
+            position: relative;
+            background: #000;
+        }
+
+        .wp-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.1) saturate(0.85);
+            transition: filter 0.4s;
+        }
+
+        .wp-card:hover .wp-image img {
+            filter: contrast(1.15) saturate(1);
+        }
+
+        .wp-info {
+            padding: 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: rgba(5, 5, 5, 0.9);
+        }
+
+        .wp-title {
+            font-family: 'Cinzel', serif;
+            color: var(--text-bright);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--blood-red);
+            color: var(--text-bright);
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .download-btn:hover {
+            background: rgba(139, 0, 0, 0.8);
+            border-color: var(--blood-bright);
+            box-shadow: 0 0 15px rgba(192, 57, 43, 0.4);
+        }
+
+        .download-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .wallpaper-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="nav-brand">
+            <span class="skull">☠</span>
+            <span class="brand-red">STREGA DONY</span>
+            <span class="brand-amp">&amp;</span>
+            BERSERKER
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Il Gioco</a>
+            <a href="compendio.html">Wiki NPC</a>
+            <a href="oggetti.html">Oggetti &amp; Armi</a>
+            <a href="mappe.html">Mappe</a>
+            <a href="video.html">Video</a>
+            <a href="ideatori.html">Ideatori</a>
+            <a href="wallpapers.html" class="active">Wallpapers</a>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Wallpapers Ufficiali</h1>
+        <p>Scarica gli sfondi esclusivi in alta definizione. Porta le ombre e le atmosfere del gioco direttamente sul tuo desktop.</p>
+    </header>
+
+    <main class="container">
+        <div class="wallpaper-grid">
+            
+            <div class="wp-card" style="animation-delay: 0.0s">
+                <div class="wp-image">
+                    <img src="wallpapers/ChatGPT%20Image%202%20apr%202026,%2008_47_46.png" alt="Wallpaper 1">
+                </div>
+                <div class="wp-info">
+                    <h3 class="wp-title">L'Oscurità di Dony</h3>
+                    <a href="wallpapers/ChatGPT%20Image%202%20apr%202026,%2008_47_46.png" download class="download-btn">
+                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        Download HD
+                    </a>
+                </div>
+            </div>
+
+            <div class="wp-card" style="animation-delay: 0.1s">
+                <div class="wp-image">
+                    <img src="wallpapers/Gemini_Generated_Image_dva3ibdva3ibdva3.png" alt="Wallpaper 2">
+                </div>
+                <div class="wp-info">
+                    <h3 class="wp-title">Visione del Varco</h3>
+                    <a href="wallpapers/Gemini_Generated_Image_dva3ibdva3ibdva3.png" download class="download-btn">
+                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        Download HD
+                    </a>
+                </div>
+            </div>
+
+            <div class="wp-card" style="animation-delay: 0.2s">
+                <div class="wp-image">
+                    <img src="wallpapers/Immagine%202026-03-21%20125928.jpg" alt="Wallpaper 3">
+                </div>
+                <div class="wp-info">
+                    <h3 class="wp-title">Rituale Ancestrale</h3>
+                    <a href="wallpapers/Immagine%202026-03-21%20125928.jpg" download class="download-btn">
+                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        Download HD
+                    </a>
+                </div>
+            </div>
+
+            <div class="wp-card" style="animation-delay: 0.3s">
+                <div class="wp-image">
+                    <img src="wallpapers/vlcsnap-2026-03-21-08h01m50s074.png" alt="Wallpaper 4">
+                </div>
+                <div class="wp-info">
+                    <h3 class="wp-title">Attraverso le Ombre</h3>
+                    <a href="wallpapers/vlcsnap-2026-03-21-08h01m50s074.png" download class="download-btn">
+                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        Download HD
+                    </a>
+                </div>
+            </div>
+
+            <div class="wp-card" style="animation-delay: 0.4s">
+                <div class="wp-image">
+                    <img src="wallpapers/vlcsnap-2026-03-21-08h06m33s269.png" alt="Wallpaper 5">
+                </div>
+                <div class="wp-info">
+                    <h3 class="wp-title">Presenze Nascoste</h3>
+                    <a href="wallpapers/vlcsnap-2026-03-21-08h06m33s269.png" download class="download-btn">
+                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        Download HD
+                    </a>
+                </div>
+            </div>
+
+            <div class="wp-card" style="animation-delay: 0.5s">
+                <div class="wp-image">
+                    <img src="wallpapers/vlcsnap-2026-03-21-11h35m04s227.png" alt="Wallpaper 6">
+                </div>
+                <div class="wp-info">
+                    <h3 class="wp-title">Il Segreto del Berserker</h3>
+                    <a href="wallpapers/vlcsnap-2026-03-21-11h35m04s227.png" download class="download-btn">
+                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        Download HD
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
