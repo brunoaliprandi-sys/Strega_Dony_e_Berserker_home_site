@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ideatori e Sviluppatori — Strega Dony e il Berserker</title>
+    <meta name="description" content="Chi sono la Strega Dony e il Berserker dell'Occulto. Scopri la verità dietro lo sviluppo del gioco.">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        .container { max-width: 1200px; margin: 6rem auto 6rem; padding: 2rem; }
+        .page-header { text-align: center; margin-bottom: 4rem; }
+        .page-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--text-bright);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px var(--blood-glow);
+        }
+        .page-sub { color: var(--text-dim); font-size: 1.1rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+        
+        .creators-card {
+            background: rgba(10, 8, 12, 0.85);
+            border: 1px solid rgba(192, 57, 43, 0.3);
+            border-radius: 6px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(139, 0, 0, 0.1);
+        }
+
+        .creators-image {
+            position: relative;
+            min-height: 500px;
+        }
+
+        .creators-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.1) saturate(0.85);
+        }
+        
+        .creators-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 50%, rgba(10,8,12,0.95) 100%);
+        }
+
+        .creators-content {
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .creator-block { margin-bottom: 2.5rem; }
+        .creator-block:last-child { margin-bottom: 0; }
+
+        .creator-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .creator-role {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--blood-bright);
+            padding: 3px 10px;
+            border: 1px solid rgba(192,57,43,0.4);
+            border-radius: 3px;
+        }
+
+        .creator-desc {
+            color: var(--text-dim);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        
+        .quote-block {
+            margin-top: 4rem;
+            padding: 2.5rem;
+            border-left: 4px solid var(--blood-red);
+            background: rgba(139, 0, 0, 0.05);
+            font-style: italic;
+            color: var(--text-bright);
+            font-size: 1.15rem;
+            line-height: 1.8;
+            border-radius: 0 6px 6px 0;
+        }
+
+        @media (max-width: 900px) {
+            .creators-card { grid-template-columns: 1fr; }
+            .creators-image { min-height: 400px; }
+            .creators-image::after { background: linear-gradient(to top, rgba(10,8,12,0.95) 0%, transparent 50%); }
+            .creators-content { padding: 3rem 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAV ──────────────────────────────────────────────── -->
+    <nav>
+        <a href="index.html" class="nav-brand">
+            <span class="skull">☠</span>
+            <span class="brand-red">STREGA DONY</span>
+            <span class="brand-amp">&amp;</span>
+            BERSERKER
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Il Gioco</a>
+            <a href="compendio.html">Wiki NPC</a>
+            <a href="oggetti.html">Oggetti &amp; Armi</a>
+            <a href="mappe.html">Mappe</a>
+            <a href="video.html">Video</a>
+            <a href="ideatori.html" class="active">Ideatori</a>
+        </div>
+    </nav>
+
+    <!-- ── CONTAINER ─────────────────────────────────────────── -->
+    <main class="container">
+        <header class="page-header">
+            <h1 class="page-title">I Creatori</h1>
+            <p class="page-sub">
+                Benvenuti nel punto in cui il visibile incontra l’invisibile. Qui non si narrano favole: si documenta ciò che oltrepassa il confine tra il mondo umano e quello dei piani sottili.
+            </p>
+        </header>
+
+        <div class="creators-card">
+            <div class="creators-image">
+                <img src="images/You_Tube_2.jpg" alt="La Strega Dony e il Berserker dell'Occulto">
+            </div>
+            <div class="creators-content">
+                
+                <div class="creator-block">
+                    <h2 class="creator-name">La Strega Dony <span class="creator-role">Sensitiva</span></h2>
+                    <p class="creator-desc">
+                        Sensitiva nata, ricettiva, ponte tra i mondi. Non osserva il soprannaturale: lo attraversa e lo percepisce. Nella vita reale, Dony pratica attivamente l'antica arte dell'esoterismo: struttura rituali per canalizzare le energie, crea sigilli di protezione e utilizza elementi della natura (cristalli, resine come il Palo Santo, erbe) per purificare gli ambienti o aprire passaggi sottili. La sua intuizione non ha bisogno di spiegazioni: è istinto, forza viva, una connessione diretta che guida il duo durante le indagini sul campo.
+                    </p>
+                </div>
+
+                <div class="creator-block">
+                    <h2 class="creator-name">Il Berserker <span class="creator-role">Custode</span></h2>
+                    <p class="creator-desc">
+                        Discendente della Beata Caterina Aliprandi, portatore di sangue consacrato e testimone razionale dell’impossibile. Nella vita reale, il Berserker unisce la caccia all'occulto alla precisione tecnologica: progetta e costruisce hardware avanzato (come la <em>GhostBox v1.0</em> multi-sensore basata su ESP32 e l'<em>EMF Hunter</em>) per convertire le suggestioni in misurazioni tangibili, log dati ed evidenze verificabili. Custode della soglia: mantiene saldo il confine e interviene quando le forze tentano di passare.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="quote-block">
+            "Qui si documentano incontri reali con l’invisibile: poltergeist, presenze, varchi energetici, scrittura automatica, alterazioni di coscienza, contatti medianici. Ogni cronaca, ogni articolo, è una prova: che il mondo invisibile esiste. Questo è il registro di ciò che accade quando la Strega Dony apre il canale… e quando il Berserker dell’Occulto deve fermare ciò che tenta di passare. Benvenuti nel Varco."
+        </div>
+    </main>
+
+</body>
+</html>
