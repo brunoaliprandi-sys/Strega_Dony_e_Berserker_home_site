@@ -1,0 +1,416 @@
+/* ================================================================
+   STREGA DONY E IL BERSERKER — shared.css
+   Horror Grotesque Design System
+================================================================ */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Creepster&family=Outfit:wght@300;400;500;700&display=swap');
+
+:root {
+    --bg-void:       #030305;
+    --bg-surface:    rgba(10, 8, 12, 0.85);
+    --blood-red:     #8b0000;
+    --blood-bright:  #c0392b;
+    --blood-glow:    rgba(139, 0, 0, 0.7);
+    --flesh:         #c9a880;
+    --bone:          #d4c9a8;
+    --poison-green:  #3d5a1e;
+    --accent-gold:   #c8a84b;
+    --accent-glow:   rgba(200, 168, 75, 0.5);
+    --neon-blue:     #4a90e2;
+    --text-bright:   #f0ebe0;
+    --text-dim:      #7a7060;
+    --glass-edge:    rgba(255, 255, 255, 0.06);
+    --card-bg-enemy:   rgba(25, 5, 5, 0.82);
+    --card-bg-neutral: rgba(5, 10, 25, 0.82);
+}
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    background-color: var(--bg-void);
+    background-image:
+        radial-gradient(ellipse 80% 60% at 50% 0%,   rgba(139,0,0,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 20% 100%, rgba(50,0,0,0.15)  0%, transparent 60%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    color: var(--text-bright);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+/* Scanlines overlay */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
+    );
+}
+
+/* ── Navigation ─────────────────────────────────────────── */
+nav {
+    background: rgba(3, 3, 5, 0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(139,0,0,0.35);
+    padding: 1rem 4rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-decoration: none;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-brand .skull { font-size: 1.6rem; animation: skullanim 4s ease-in-out infinite; }
+@keyframes skullanim {
+    0%,100% { transform: rotate(-5deg); filter: drop-shadow(0 0 6px var(--blood-red)); }
+    50%      { transform: rotate(5deg);  filter: drop-shadow(0 0 14px var(--blood-red)); }
+}
+
+.nav-brand .brand-red  { color: var(--blood-bright); }
+.nav-brand .brand-amp  { color: var(--text-dim); font-weight: 300; }
+
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+}
+
+.nav-links a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--blood-bright);
+    box-shadow: 0 0 8px var(--blood-red);
+    transition: width 0.4s ease;
+}
+
+.nav-links a:hover  { color: var(--text-bright); }
+.nav-links a:hover::after,
+.nav-links a.active::after { width: 100%; }
+.nav-links a.active { color: var(--blood-bright); }
+
+/* ── Drip decoration ────────────────────────────────────── */
+.drip-bar {
+    position: relative;
+    height: 24px;
+    background: var(--blood-red);
+    overflow: visible;
+}
+
+.drip-bar svg {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    pointer-events: none;
+}
+
+/* ── Section titles ─────────────────────────────────────── */
+.section-badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--blood-bright);
+    border: 1px solid rgba(192,57,43,0.5);
+    padding: 0.3rem 1.2rem;
+    border-radius: 2px;
+    margin-bottom: 1.2rem;
+    animation: badge-pulse 3s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(192,57,43,0.3); }
+    50%      { box-shadow: 0 0 12px 4px rgba(192,57,43,0.15); }
+}
+
+.glitch-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    position: relative;
+    color: var(--text-bright);
+    isolation: isolate;
+}
+
+.glitch-title::before,
+.glitch-title::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    opacity: 0.55;
+}
+
+.glitch-title::before {
+    left: 2px;
+    color: #8b5a3a;
+    animation: glitch-top 6s infinite 0.5s;
+}
+
+.glitch-title::after {
+    left: -2px;
+    color: #5c2e10;
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    animation: glitch-bot 6s infinite 1.2s;
+}
+
+@keyframes glitch-top {
+    0%,90%,100% { transform: translate(0); opacity: 0; }
+    92%          { transform: translate(-2px,-1px); opacity: 0.55; }
+    94%          { transform: translate(2px,1px);  opacity: 0.55; }
+}
+
+@keyframes glitch-bot {
+    0%,88%,100% { transform: translate(0); opacity: 0; }
+    90%          { transform: translate(2px,1px);  opacity: 0.45; }
+    93%          { transform: translate(-2px,-1px); opacity: 0.45; }
+}
+
+/* ── Cards ──────────────────────────────────────────────── */
+.npc-card {
+    border-radius: 6px;
+    border: 1px solid var(--glass-edge);
+    padding: 1.4rem;
+    backdrop-filter: blur(14px);
+    transition: transform 0.45s cubic-bezier(.2,.9,.3,1.1), box-shadow 0.45s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.npc-card.enemy   { background: var(--card-bg-enemy); }
+.npc-card.neutral { background: var(--card-bg-neutral); }
+
+/* corner gore accents */
+.npc-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 40px; height: 40px;
+    background: transparent;
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+    border-radius: 0 0 6px 0;
+    opacity: 0.4;
+    transition: opacity 0.3s, width 0.3s, height 0.3s;
+}
+
+.npc-card.enemy::after   { border-color: var(--blood-bright); }
+.npc-card.neutral::after { border-color: var(--neon-blue); }
+
+/* top bar glow */
+.npc-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    opacity: 0;
+    transition: opacity 0.35s;
+}
+
+.npc-card.enemy::before   { background: linear-gradient(90deg, transparent, var(--blood-bright), transparent); }
+.npc-card.neutral::before { background: linear-gradient(90deg, transparent, var(--neon-blue), transparent); }
+
+.npc-card:hover { transform: translateY(-12px); }
+.npc-card:hover::before  { opacity: 1; }
+.npc-card:hover::after   { opacity: 1; width: 60px; height: 60px; }
+
+.npc-card.enemy:hover {
+    box-shadow: 0 24px 50px rgba(0,0,0,0.7), 0 0 40px rgba(139,0,0,0.2), inset 0 0 60px rgba(139,0,0,0.04);
+    border-color: rgba(192,57,43,0.4);
+}
+
+.npc-card.neutral:hover {
+    box-shadow: 0 24px 50px rgba(0,0,0,0.7), 0 0 40px rgba(74,144,226,0.15);
+    border-color: rgba(74,144,226,0.35);
+}
+
+/* ── Card image ─────────────────────────────────────────── */
+.npc-img-container {
+    width: 100%;
+    height: 230px;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.7) 100%);
+    border-radius: 4px;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+.npc-img-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.npc-img {
+    max-width: 85%; max-height: 85%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,1));
+    transition: transform 0.6s cubic-bezier(.2,.9,.3,1.2), filter 0.5s;
+}
+
+.npc-card.enemy .npc-img { filter: drop-shadow(0 8px 20px rgba(0,0,0,1)) saturate(0.8) brightness(0.9); }
+
+.npc-card:hover .npc-img {
+    transform: scale(1.18) translateY(-6px);
+    filter: drop-shadow(0 12px 30px rgba(0,0,0,0.9)) brightness(1.1);
+}
+
+/* ── Card text ──────────────────────────────────────────── */
+.npc-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: var(--text-bright);
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.npc-card.enemy   .npc-name .name-line { background: linear-gradient(90deg, var(--blood-bright), transparent); }
+.npc-card.neutral .npc-name .name-line { background: linear-gradient(90deg, var(--neon-blue), transparent); }
+.name-line { flex: 1; height: 1px; opacity: 0.5; }
+
+.npc-bio {
+    color: var(--text-dim);
+    font-size: 0.98rem;
+    font-weight: 300;
+    margin-bottom: 1.2rem;
+    flex-grow: 1;
+    line-height: 1.65;
+}
+
+.npc-drop {
+    background: rgba(0,0,0,0.55);
+    padding: 1rem 1.2rem;
+    border-radius: 4px;
+}
+
+.npc-card.enemy   .npc-drop { border-left: 3px solid var(--blood-red); }
+.npc-card.neutral .npc-drop { border-left: 3px solid var(--neon-blue); }
+
+.drop-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.npc-card.enemy   .drop-label { color: var(--blood-bright); }
+.npc-card.neutral .drop-label { color: var(--neon-blue); }
+
+.drop-item {
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: var(--bone);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+/* ── Grid ───────────────────────────────────────────────── */
+.npc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2.2rem;
+}
+
+/* ── Fade-in animation ──────────────────────────────────── */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(36px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.npc-card {
+    animation: fadeUp 0.7s cubic-bezier(.2,.9,.3,1.1) forwards;
+    opacity: 0;
+}
+
+/* ── Section divider ────────────────────────────────────── */
+.section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin: 5rem 0 2.5rem;
+    padding-bottom: 1rem;
+}
+
+.section-title.enemy {
+    color: var(--blood-bright);
+    border-bottom: 1px solid rgba(192,57,43,0.35);
+    text-shadow: 0 0 30px var(--blood-glow);
+}
+
+.section-title.neutral {
+    color: var(--neon-blue);
+    border-bottom: 1px solid rgba(74,144,226,0.3);
+    text-shadow: 0 0 25px rgba(74,144,226,0.4);
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links a { font-size: 0.8rem; letter-spacing: 1px; }
+    .nav-links { gap: 1.2rem; }
+    .npc-grid { grid-template-columns: 1fr; }
+    .section-title { font-size: 1.7rem; }
+}

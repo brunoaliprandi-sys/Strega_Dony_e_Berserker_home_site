@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Gameplay — Strega Dony e il Berserker</title>
+    <meta name="description" content="Guarda i video gameplay ufficiali di Strega Dony e il Berserker, il videogioco indie Horror RPG in sviluppo.">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 5rem 2rem 3rem;
+            background: linear-gradient(to bottom, rgba(139,0,0,0.08), var(--bg-void));
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            margin-bottom: 4rem;
+        }
+
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            color: var(--text-bright);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 40px var(--blood-glow);
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 1rem auto 0;
+        }
+
+        /* ── Featured (first video large) ── */
+        .featured-video {
+            margin-bottom: 4rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(10, 8, 12, 0.8);
+            backdrop-filter: blur(12px);
+            position: relative;
+        }
+
+        .featured-video::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--blood-bright), var(--accent-gold), transparent);
+            z-index: 1;
+        }
+
+        .featured-embed {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 */
+        }
+
+        .featured-embed iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .featured-info {
+            padding: 2rem 2.5rem;
+        }
+
+        .featured-label {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--blood-bright);
+            border: 1px solid rgba(192,57,43,0.4);
+            padding: 2px 12px;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .featured-info h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            color: var(--text-bright);
+            letter-spacing: 1px;
+            line-height: 1.3;
+        }
+
+        /* ── Grid of other videos ── */
+        .videos-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(200,168,75,0.2);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: rgba(10, 8, 12, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(.2,.9,.3,1.1), box-shadow 0.4s, border-color 0.4s;
+            position: relative;
+        }
+
+        .video-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blood-red), transparent);
+            opacity: 0;
+            transition: opacity 0.35s;
+            z-index: 2;
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 30px rgba(139,0,0,0.15);
+            border-color: rgba(192,57,43,0.35);
+        }
+
+        .video-card:hover::before { opacity: 1; }
+
+        .video-embed {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+        }
+
+        .video-embed iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info {
+            padding: 1.2rem 1.5rem 1.5rem;
+        }
+
+        .video-index {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-info h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--text-bright);
+            line-height: 1.4;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── CTA YouTube ── */
+        .yt-cta {
+            text-align: center;
+            margin-top: 5rem;
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .yt-cta p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .yt-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #ff0000;
+            color: #fff;
+            padding: 1rem 2.5rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: 'Cinzel', serif;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            transition: all 0.35s;
+        }
+
+        .yt-btn:hover {
+            background: #cc0000;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(255,0,0,0.35);
+        }
+
+        .yt-btn svg { fill: currentColor; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .video-card {
+            animation: fadeUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        @media (max-width: 768px) {
+            .video-grid { grid-template-columns: 1fr; }
+        }
+    
+        /* ── Custom Thumbnail Links (to bypass embed disabled) ── */
+        .yt-thumb-link {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            inset: 0;
+            text-decoration: none;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .yt-thumb-link img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s, filter 0.5s;
+        }
+
+        .yt-thumb-link::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            transition: background 0.4s;
+        }
+
+        .yt-thumb-link:hover img {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .yt-thumb-link:hover::after {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(204, 0, 0, 0.85);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: transform 0.3s, background 0.3s;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        
+        .featured-embed .play-overlay {
+            width: 80px;
+            height: 80px;
+        }
+
+        .play-overlay svg {
+            width: 30px;
+            height: 30px;
+            fill: #fff;
+            margin-left: 4px; /* optical center */
+        }
+        
+        .featured-embed .play-overlay svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .yt-thumb-link:hover .play-overlay {
+            transform: translate(-50%, -50%) scale(1.15);
+            background: rgba(255, 0, 0, 1);
+            box-shadow: 0 0 30px rgba(255,0,0,0.6);
+        }
+        
+        /* Fallback for maxresdefault 404 */
+        .yt-thumb-link img[src$="maxresdefault.jpg"] {
+            /* If maxresdefault fails, we can't do much with pure CSS, but we use hqdefault for grid */
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="nav-brand">
+            <span class="skull">&#9760;</span>
+            <span class="brand-red">STREGA DONY</span>
+            <span class="brand-amp">&amp;</span>
+            BERSERKER
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Il Gioco</a>
+            <a href="compendio.html">Wiki NPC</a>
+            <a href="mappe.html">Mappe</a>
+            <a href="oggetti.html">Oggetti &amp; Armi</a>
+            <a href="video.html" class="active">Video</a>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Video &amp; Gameplay</h1>
+        <p>Guarda i video di sviluppo e le sessioni di gameplay ufficiali del canale YouTube — il gioco prende vita frame per frame.</p>
+    </header>
+
+    <div class="container">
+
+        <!-- ── FEATURED VIDEO (most recent) ── -->
+        <div class="featured-video">
+            <div class="featured-embed">
+                <a href="https://www.youtube.com/watch?v=5BBjp3ei1f8&list=PL8VmVv-oQ6eIwvHocxn5OJyEBSlkBaOGG" target="_blank" class="yt-thumb-link" title="Guarda su YouTube">
+                    <img src="https://img.youtube.com/vi/5BBjp3ei1f8/maxresdefault.jpg" alt="UPDATE CGI: Nuovi Effetti Demoniaci">
+                    <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                </a>
+            </div>
+            <div class="featured-info">
+                <span class="featured-label">⚡ Ultimo Video</span>
+                <h2>UPDATE CGI: Nuovi Effetti Demoniaci — Il Mondo è Sotto Attacco</h2>
+            </div>
+        </div>
+
+        <!-- ── VIDEO GRID ── -->
+        <p class="videos-title">🎬 Tutti i Video della Playlist</p>
+        <div class="video-grid" id="video-grid">
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <a href="https://www.youtube.com/watch?v=4A_z5eoGbIU&list=PL8VmVv-oQ6eIwvHocxn5OJyEBSlkBaOGG" target="_blank" class="yt-thumb-link" title="Guarda su YouTube">
+                    <img src="https://img.youtube.com/vi/4A_z5eoGbIU/hqdefault.jpg" alt="Breaking News: Il Mondo è Sotto Attacco">
+                    <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                </a>
+                </div>
+                <div class="video-info">
+                    <span class="video-index">Video 02</span>
+                    <h3>Breaking News: Il Mondo è Sotto Attacco | ALLARME DEMONI!</h3>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <a href="https://www.youtube.com/watch?v=mJPCwn0MBno&list=PL8VmVv-oQ6eIwvHocxn5OJyEBSlkBaOGG" target="_blank" class="yt-thumb-link" title="Guarda su YouTube">
+                    <img src="https://img.youtube.com/vi/mJPCwn0MBno/hqdefault.jpg" alt="FULL GAME PLAY Under Development 2026 04 07">
+                    <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                </a>
+                </div>
+                <div class="video-info">
+                    <span class="video-index">Video 03</span>
+                    <h3>FULL GAME PLAY — Under Development 2026 04 07</h3>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <a href="https://www.youtube.com/watch?v=u3PkuIdGLZI&list=PL8VmVv-oQ6eIwvHocxn5OJyEBSlkBaOGG" target="_blank" class="yt-thumb-link" title="Guarda su YouTube">
+                    <img src="https://img.youtube.com/vi/u3PkuIdGLZI/hqdefault.jpg" alt="PRIMO LIVELLO CGI | OST del BOSS FINALE SARAGATANAS">
+                    <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                </a>
+                </div>
+                <div class="video-info">
+                    <span class="video-index">Video 04</span>
+                    <h3>Primo Livello CGI | OST del Boss Finale Saragatanas</h3>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <a href="https://www.youtube.com/watch?v=gov4Qe3SSrQ&list=PL8VmVv-oQ6eIwvHocxn5OJyEBSlkBaOGG" target="_blank" class="yt-thumb-link" title="Guarda su YouTube">
+                    <img src="https://img.youtube.com/vi/gov4Qe3SSrQ/hqdefault.jpg" alt="FULL GAMEPLAY nuovi sviluppi 28 03">
+                    <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                </a>
+                </div>
+                <div class="video-info">
+                    <span class="video-index">Video 05</span>
+                    <h3>Full Gameplay Nuovi Sviluppi — 2026 28 03</h3>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <a href="https://www.youtube.com/watch?v=Pw54MY-vYR4&list=PL8VmVv-oQ6eIwvHocxn5OJyEBSlkBaOGG" target="_blank" class="yt-thumb-link" title="Guarda su YouTube">
+                    <img src="https://img.youtube.com/vi/Pw54MY-vYR4/hqdefault.jpg" alt="NEW NPC ANIMATIONS and NEW LEVELS">
+                    <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                </a>
+                </div>
+                <div class="video-info">
+                    <span class="video-index">Video 06</span>
+                    <h3>New NPC Animations and New Levels — Under Development 27 03</h3>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <a href="https://www.youtube.com/watch?v=AJGdkEANsMM&list=PL8VmVv-oQ6eIwvHocxn5OJyEBSlkBaOGG" target="_blank" class="yt-thumb-link" title="Guarda su YouTube">
+                    <img src="https://img.youtube.com/vi/AJGdkEANsMM/hqdefault.jpg" alt="Game Play Parte 2 - Under Development">
+                    <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                </a>
+                </div>
+                <div class="video-info">
+                    <span class="video-index">Video 07</span>
+                    <h3>Game Play — Parte 2 — Under Development 26/03/2026</h3>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-embed">
+                    <a href="https://www.youtube.com/watch?v=a4vNKPFXWbM&list=PL8VmVv-oQ6eIwvHocxn5OJyEBSlkBaOGG" target="_blank" class="yt-thumb-link" title="Guarda su YouTube">
+                    <img src="https://img.youtube.com/vi/a4vNKPFXWbM/hqdefault.jpg" alt="Game Play Parte 1 - Under Development">
+                    <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                </a>
+                </div>
+                <div class="video-info">
+                    <span class="video-index">Video 08</span>
+                    <h3>Game Play — Parte 1 — Under Development 26/03/2026</h3>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ── YT Channel CTA ── -->
+        <div class="yt-cta">
+            <p>Iscriviti al canale per seguire lo sviluppo del gioco in tempo reale.</p>
+            <a href="https://www.youtube.com/playlist?list=PL8VmVv-oQ6eIwvHocxn5OJyEBSlkBaOGG"
+               class="yt-btn" target="_blank" rel="noopener">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                Guarda la Playlist Completa su YouTube
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        // Staggered fade-in for video cards
+        document.querySelectorAll('.video-card').forEach((c, i) => {
+            c.style.animationDelay = `${i * 0.08}s`;
+        });
+    </script>
+
+</body>
+</html>
