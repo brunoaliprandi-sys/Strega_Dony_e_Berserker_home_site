@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libri Reali — Strega Dony e il Berserker</title>
+    <meta name="description" content="I libri reali di Bruno Aliprandi — Ghost Hunting Moderno e Il Berserker dell'Occulto. Le vere ispirazioni dietro il videogioco. Disponibili su Amazon.">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* ── PAGE HERO ────────────────────────────────────── */
+        .libri-hero {
+            text-align: center;
+            padding: 7rem 2rem 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .libri-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 90% 60% at 50% 0%, rgba(139,0,0,0.28) 0%, transparent 65%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(200,168,75,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 50% at 10% 50%, rgba(80,0,0,0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Floating rune glyphs */
+        .libri-hero::after {
+            content: '📖';
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.03;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            filter: blur(2px);
+        }
+
+        .libri-hero-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .libri-hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 5.5vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--text-bright);
+            text-shadow: 0 0 60px var(--blood-glow);
+            margin-bottom: 0.8rem;
+            line-height: 1.1;
+        }
+
+        .libri-hero h1 span { color: var(--accent-gold); }
+
+        .libri-hero .hero-tagline {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            font-weight: 300;
+            max-width: 640px;
+            margin: 0 auto 0.6rem;
+            line-height: 1.85;
+        }
+
+        .libri-hero .hero-sub-quote {
+            font-style: italic;
+            color: var(--blood-bright);
+            font-size: 0.92rem;
+            letter-spacing: 1.5px;
+            margin-top: 0.4rem;
+            opacity: 0.85;
+        }
+
+        /* ── LORE BANNER ───────────────────────────────── */
+        .lore-banner {
+            margin: 0 auto;
+            max-width: 860px;
+            padding: 1.8rem 2.5rem;
+            border: 1px solid rgba(200,168,75,0.25);
+            border-radius: 8px;
+            background: rgba(8,6,3,0.75);
+            backdrop-filter: blur(14px);
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lore-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .lore-icon {
+            font-size: 2.2rem;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 10px rgba(200,168,75,0.5));
+        }
+
+        .lore-text {
+            color: var(--text-dim);
+            font-size: 0.98rem;
+            line-height: 1.85;
+            font-weight: 300;
+        }
+
+        .lore-text strong {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        /* ── CONTAINER ─────────────────────────────────── */
+        .libri-container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 2rem 2rem 8rem;
+        }
+
+        /* ── BOOKS GRID ────────────────────────────────── */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 3.5rem;
+            margin-top: 4rem;
+        }
+
+        /* ── BOOK CARD ─────────────────────────────────── */
+        .book-card {
+            background: rgba(8, 5, 10, 0.9);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(20px);
+            transition: transform 0.45s cubic-bezier(.2,.9,.3,1.1), box-shadow 0.45s, border-color 0.4s;
+            animation: fadeUp 0.8s cubic-bezier(.2,.9,.3,1.1) forwards;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .book-card:nth-child(1) { animation-delay: 0.1s; }
+        .book-card:nth-child(2) { animation-delay: 0.3s; }
+
+        /* Top accent line */
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--blood-bright), var(--accent-gold), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .book-card:hover {
+            transform: translateY(-16px);
+            box-shadow:
+                0 32px 70px rgba(0,0,0,0.85),
+                0 0 60px rgba(139,0,0,0.2),
+                inset 0 0 80px rgba(139,0,0,0.03);
+            border-color: rgba(192,57,43,0.4);
+        }
+
+        .book-card:hover::before { opacity: 1; }
+
+        /* ── BOOK LAYOUT: horizontal inside card ──────── */
+        .book-layout {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 0;
+            min-height: 320px;
+            flex-grow: 1;
+        }
+
+        /* ── COVER AREA ─────────────────────────────── */
+        .book-cover-wrap {
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, rgba(139,0,0,0.18), rgba(0,0,0,0.95));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            overflow: hidden;
+        }
+
+        .book-cover-wrap::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 60px;
+            background: linear-gradient(to right, transparent, rgba(8,5,10,0.9));
+            pointer-events: none;
+        }
+
+        /* Spine shimmer glow */
+        .book-cover-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 80% at 40% 50%, rgba(200,168,75,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .book-cover-img {
+            width: 160px;
+            height: auto;
+            object-fit: contain;
+            border-radius: 4px 8px 8px 4px;
+            box-shadow:
+                -6px 0 20px rgba(0,0,0,0.9),
+                6px 6px 24px rgba(0,0,0,0.8),
+                0 0 40px rgba(139,0,0,0.25);
+            transition: transform 0.6s cubic-bezier(.2,.9,.3,1.2), box-shadow 0.5s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .book-card:hover .book-cover-img {
+            transform: scale(1.06) rotate(-1.5deg) translateX(-4px);
+            box-shadow:
+                -10px 0 30px rgba(0,0,0,0.95),
+                10px 10px 35px rgba(0,0,0,0.9),
+                0 0 60px rgba(200,168,75,0.2);
+        }
+
+        /* Amazon badge on cover */
+        .amazon-badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, #f90, #e47911);
+            color: #000;
+            font-size: 0.62rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px 0 8px 0;
+            z-index: 2;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* ── BOOK INFO ──────────────────────────────── */
+        .book-info {
+            padding: 2.2rem 2rem 2rem 1.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            height: 100%;
+        }
+
+        .book-series {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 0.6rem;
+            opacity: 0.9;
+        }
+
+        .book-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--text-bright);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+        }
+
+        .book-subtitle {
+            color: var(--blood-bright);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .book-author {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .book-author span {
+            color: var(--bone);
+            font-style: normal;
+            font-weight: 800;
+            font-size: 1.15rem;
+        }
+
+        /* ── STARS ─────────────────────────────────── */
+        .book-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 1.2rem;
+        }
+
+        .stars {
+            color: #f90;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .rating-val {
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 0.88rem;
+        }
+
+        .rating-count {
+            color: var(--text-dim);
+            font-size: 0.78rem;
+        }
+
+        /* ── DESCRIPTION ───────────────────────────── */
+        .book-desc {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-weight: 300;
+            line-height: 1.78;
+            margin-bottom: 1.3rem;
+            flex-grow: 1;
+        }
+
+        .book-desc strong {
+            color: var(--bone);
+            font-weight: 500;
+        }
+
+        /* ── SPECS TABLE ──────────────────────────── */
+        .book-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem 0.8rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.2rem;
+            background: rgba(0,0,0,0.4);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .spec-item {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .spec-label {
+            font-size: 0.63rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(122,112,96,0.7);
+        }
+
+        .spec-val {
+            color: var(--bone);
+            font-weight: 500;
+        }
+
+        /* ── PRICE ROW ─────────────────────────────── */
+        .book-price-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.3rem;
+        }
+
+        .book-price {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px rgba(200,168,75,0.35);
+            line-height: 1;
+        }
+
+        .book-price sup {
+            font-size: 1rem;
+            vertical-align: super;
+        }
+
+        .book-price-note {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .book-format-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 1rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .book-format-icon {
+            color: #00ff00;
+            font-size: 0.7rem;
+            margin-right: 8px;
+        }
+
+        /* ── AMAZON BUTTON ──────────────────────────── */
+        .amazon-btn {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 1.5rem;
+            width: 100%;
+            padding: 1.2rem 1.8rem;
+            background: repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px), #e47911;
+            color: #000;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 20px rgba(228,121,17,0.3);
+            margin-top: 1rem;
+        }
+
+        .amazon-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(228,121,17,0.45);
+        }
+
+        .amazon-btn-logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            font-style: italic;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .amazon-btn-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.15;
+            gap: 6px;
+        }
+
+        .amazon-btn-text .btn-main { 
+            font-size: 1rem; 
+            font-weight: 900; 
+        }
+
+        .amazon-btn-text .btn-sub { 
+            font-size: 0.6rem; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            font-weight: 600;
+            opacity: 0.85;
+        }
+
+        /* ── IN-GAME CONNECTION SECTION ─────────────── */
+        .ingame-section {
+            margin-top: 5rem;
+        }
+
+        .ingame-section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .ingame-section-sub {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 3rem;
+        }
+
+        .ingame-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .ingame-card {
+            background: rgba(8,5,12,0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 2rem 1.8rem;
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ingame-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blood-red), transparent);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .ingame-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(192,57,43,0.25);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(139,0,0,0.1);
+        }
+
+        .ingame-card:hover::before { transform: scaleX(1); }
+
+        .ingame-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .ingame-card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--text-bright);
+            margin-bottom: 0.6rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .ingame-card p {
+            color: var(--text-dim);
+            font-size: 0.88rem;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        .ingame-card p em {
+            color: var(--blood-bright);
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        /* ── AUTHOR SECTION ────────────────────────── */
+        .author-band {
+            margin-top: 5rem;
+            padding: 3.5rem 3rem;
+            border: 1px solid rgba(200,168,75,0.2);
+            border-radius: 10px;
+            background: rgba(8,6,4,0.85);
+            backdrop-filter: blur(16px);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .author-band::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+        }
+
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid rgba(200,168,75,0.4);
+            background: radial-gradient(circle, rgba(200,168,75,0.15), rgba(0,0,0,0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            box-shadow: 0 0 30px rgba(200,168,75,0.2);
+            flex-shrink: 0;
+        }
+
+        .author-info h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.4rem;
+            letter-spacing: 1px;
+        }
+
+        .author-info p {
+            color: var(--text-dim);
+            font-size: 0.92rem;
+            font-weight: 300;
+            line-height: 1.75;
+        }
+
+        .author-info p strong {
+            color: var(--bone);
+            font-weight: 500;
+        }
+
+        .author-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--accent-gold);
+            border: 1px solid rgba(200,168,75,0.4);
+            padding: 0.8rem 1.8rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.35s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .author-link:hover {
+            background: rgba(200,168,75,0.12);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(200,168,75,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* ── SECTION DIVIDER ────────────────────────── */
+        .section-divider {
+            text-align: center;
+            margin: 5rem 0 3rem;
+            position: relative;
+        }
+
+        .section-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139,0,0,0.45), rgba(200,168,75,0.3), rgba(139,0,0,0.45), transparent);
+        }
+
+        .section-divider span {
+            position: relative;
+            background: var(--bg-void);
+            padding: 0 2rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* ── RESPONSIVE ─────────────────────────────── */
+        @media (max-width: 900px) {
+            .books-grid { grid-template-columns: 1fr; }
+            .ingame-grid { grid-template-columns: 1fr 1fr; }
+            .author-band { grid-template-columns: auto 1fr; }
+            .author-link { grid-column: 1 / -1; text-align: center; justify-content: center; }
+        }
+
+        @media (max-width: 680px) {
+            .book-layout { grid-template-columns: 1fr; }
+            .book-cover-wrap {
+                height: 280px;
+                border-radius: 12px 12px 0 0;
+            }
+            .book-cover-wrap::after { display: none; }
+            .book-cover-img { width: 130px; }
+            .ingame-grid { grid-template-columns: 1fr; }
+            .author-band { grid-template-columns: 1fr; text-align: center; }
+            .author-avatar { margin: 0 auto; }
+            .lore-banner { flex-direction: column; }
+        }
+
+        @media (max-width: 480px) {
+            .book-specs { grid-template-columns: 1fr; }
+            .book-price { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAV ──────────────────────────────────────────────── -->
+    <nav>
+        <a href="index.html" class="nav-brand">
+            <span class="skull">☠</span>
+            <span class="brand-red">STREGA DONY</span>
+            <span class="brand-amp">&amp;</span>
+            BERSERKER
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Il Gioco</a>
+            <a href="compendio.html">Wiki NPC</a>
+            <a href="oggetti.html">Oggetti &amp; Armi</a>
+            <a href="mappe.html">Mappe</a>
+            <a href="video.html">Video</a>
+            <a href="ideatori.html">Ideatori</a>
+            <a href="wallpapers.html">Wallpapers</a>
+            <a href="shop.html">Shop</a>
+            <a href="libri.html" class="active">Libri</a>
+        </div>
+    </nav>
+
+    <!-- ── DRIP BAR ─────────────────────────────────────────── -->
+    <div class="drip-bar">
+        <svg viewBox="0 0 1440 50" preserveAspectRatio="none">
+            <path d="M0,0 L1440,0 L1440,20 Q1200,50 960,30 Q720,10 480,35 Q240,55 0,25 Z" fill="#8b0000"/>
+        </svg>
+    </div>
+
+    <!-- ── PAGE HERO ─────────────────────────────────────────── -->
+    <section class="libri-hero">
+        <div class="libri-hero-inner">
+            <div class="section-badge">📚 Dalla Realtà al Gioco 📚</div>
+            <h1>I Libri <span>Reali</span></h1>
+            <p class="hero-tagline">
+                Prima del videogioco, c'era la verità.<br>
+                Il visionario Bruno Aliprandi, con la <strong>Strega Dony</strong> come sua massima fonte di ispirazione e guida, non si è limitato a creare un videogioco —
+                ha forgiato un universo occulto intero, documentandolo in opere che nessun altro avrebbe osato scrivere.<br>
+                Questi manuali <em>leggendari</em> sono la pietra filosofale da cui nasce ogni singolo demone,
+                ogni rituale, ogni orrore del gioco. Capolavori assoluti. Imperdibili. Su Amazon.
+            </p>
+            <p class="hero-sub-quote">— Trovi questi volumi sfogliabili nella Libreria Esoterica in-game —</p>
+
+            <!-- Lore Connection Banner -->
+            <div class="lore-banner">
+                <span class="lore-icon">🔮</span>
+                <p class="lore-text">
+                    Nel gioco, la <strong>Libreria Esoterica</strong> custodisce copie di questi tomi. Il Berserker li consulta per affinare le tecniche di caccia agli spettri, mentre Strega Dony vi attinge per i suoi rituali.
+                    Leggere i libri reali <strong>svelerà dettagli nascosti nella lore del videogioco</strong> che solo gli occhi attenti riconosceranno.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── MAIN CONTENT ──────────────────────────────────────── -->
+    <main class="libri-container">
+
+        <div class="books-grid">
+
+            <!-- ══ LIBRO 1: GHOST HUNTING MODERNO ══ -->
+            <article class="book-card" id="ghost-hunting">
+                <div class="book-layout">
+
+                    <!-- Cover -->
+                    <div class="book-cover-wrap">
+                        <span class="amazon-badge">Amazon.it</span>
+                        <img
+                            class="book-cover-img"
+                            src="https://images-na.ssl-images-amazon.com/images/P/B0GBKYKJGP.jpg"
+                            alt="Copertina di Ghost Hunting Moderno: Strumenti e Metodi di Bruno Aliprandi"
+                            onerror="this.onerror=null; this.src='https://m.media-amazon.com/images/I/71-BxJmDH3L._SL1500_.jpg';"
+                        >
+                    </div>
+
+                    <!-- Info -->
+                    <div class="book-info">
+                        <div class="book-author">di <span>Bruno Aliprandi</span></div>
+
+                        <div class="book-rating">
+                            <span class="stars">★★★★★</span>
+                        </div>
+
+                        <p class="book-desc">
+                            Il manuale per chi vuole entrare in un luogo segnalato, accendere gli strumenti e lavorare con <strong>metodo rigoroso</strong>. Non promette "verità" e non chiede fede: ti dà una procedura che riduce l'errore e rende ogni sessione <strong>verificabile a mente fredda</strong>.
+                            <br><br>
+                            Dall'intervista strutturata alle vittime, alla <strong>baseline ambientale</strong>, fino alla documentazione difendibile: ogni fase della caccia agli spettri secondo protocollo scientifico.
+                        </p>
+
+                        <div class="book-specs">
+                            <div class="spec-item">
+                                <span class="spec-label">Pagine</span>
+                                <span class="spec-val">429</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Lingua</span>
+                                <span class="spec-val">Italiano</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Pubblicato</span>
+                                <span class="spec-val">Dic. 2025</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">ISBN-13</span>
+                                <span class="spec-val">979-8279291984</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Formato</span>
+                                <span class="spec-val">Copertina flessibile</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Dimensioni</span>
+                                <span class="spec-val">15×23 cm</span>
+                            </div>
+                        </div>
+
+                        <div class="book-price-row">
+                            <div>
+                                <div class="book-price-note">Prezzo Amazon</div>
+                                <div class="book-price"><sup>€</sup>25,90</div>
+                            </div>
+                            <span class="book-format-tag"><span class="book-format-icon">■</span> CARTACEO</span>
+                        </div>
+
+                        <a
+                            href="https://www.amazon.it/Ghost-Hunting-Moderno-Strumenti-Metodi/dp/B0GBKYKJGP/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="amazon-btn"
+                            id="buy-ghost-hunting"
+                        >
+                            <span class="amazon-btn-logo">amazon</span>
+                            <span class="amazon-btn-text">
+                                <span class="btn-main">Acquista<br>su<br>Amazon</span>
+                                <span class="btn-sub">SPEDIZIONE<br>RAPIDA<br>DISPONIBILE</span>
+                            </span>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Extended description strip -->
+                <div style="padding: 0 2rem 2rem 2rem; border-top: 1px solid rgba(255,255,255,0.04); margin-top: 1.5rem; padding-top: 1.5rem;">
+                    <p style="color:var(--text-dim); font-size:0.85rem; line-height:1.75; font-weight:300;">
+                        <strong style="color:var(--bone);">Nel gioco:</strong> questo volume appare nella <em style="color:var(--blood-bright);">Libreria Esoterica</em> come risorsa consultabile dal Berserker. Alcune meccaniche di rilevazione spettrale nel gioco si basano direttamente sui protocolli descritti in questo manuale.
+                    </p>
+                </div>
+            </article>
+
+            <!-- ══ LIBRO 2: IL BERSERKER DELL'OCCULTO ══ -->
+            <article class="book-card" id="il-berserker-occulto">
+                <div class="book-layout">
+
+                    <!-- Cover -->
+                    <div class="book-cover-wrap">
+                        <span class="amazon-badge">Amazon.it</span>
+                        <img
+                            class="book-cover-img"
+                            src="https://images-na.ssl-images-amazon.com/images/P/B0FPB2P82S.jpg"
+                            alt="Copertina di Berserker dell'Occulto di Bruno Aliprandi"
+                            onerror="this.onerror=null; this.src='https://m.media-amazon.com/images/I/71-BxJmDH3L._SL1500_.jpg';"
+                        >
+                    </div>
+
+                    <!-- Info -->
+                    <div class="book-info">
+                        <div class="book-author">di <span>Bruno Aliprandi</span></div>
+
+                        <div class="book-rating">
+                            <span class="stars">★★★★★</span>
+                        </div>
+
+                        <p class="book-desc">
+                            Il secondo manuale dell'universo di Aliprandi. Se <em>Ghost Hunting Moderno</em> insegna a <strong>rilevare</strong>, questo libro insegna a <strong>sopravvivere</strong> — a ciò che non si vede, non si sente, ma agisce nell'ombra.
+                            <br><br>
+                            Un vademecum per chi si avventura nell'oscuità degli spazi infestati, affrontando l'<strong>invisibile con la mente da Berserker</strong>: niente paura, solo metodo e coraggio brutale.
+                        </p>
+
+                        <div class="book-specs">
+                            <div class="spec-item">
+                                <span class="spec-label">Pagine</span>
+                                <span class="spec-val">248</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Lingua</span>
+                                <span class="spec-val">Italiano</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Pubblicato</span>
+                                <span class="spec-val">Ago. 2025</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">ISBN-13</span>
+                                <span class="spec-val">979-8262964413</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Formato</span>
+                                <span class="spec-val">Copertina flessibile</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Dimensioni</span>
+                                <span class="spec-val">15×23 cm</span>
+                            </div>
+                        </div>
+
+                        <div class="book-price-row">
+                            <div>
+                                <div class="book-price-note">Prezzo Amazon</div>
+                                <div class="book-price"><sup>€</sup>19,66</div>
+                            </div>
+                            <span class="book-format-tag"><span class="book-format-icon">■</span> CARTACEO</span>
+                        </div>
+
+                        <a
+                            href="https://www.amazon.it/Berserker-dellOcculto-sopravvivere-invisibile-alloscurit%C3%A0/dp/B0FPB2P82S/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="amazon-btn"
+                            id="buy-il-berserker-occulto"
+                        >
+                            <span class="amazon-btn-logo">amazon</span>
+                            <span class="amazon-btn-text">
+                                <span class="btn-main">Acquista<br>su<br>Amazon</span>
+                                <span class="btn-sub">SPEDIZIONE<br>RAPIDA<br>DISPONIBILE</span>
+                            </span>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Extended description strip -->
+                <div style="padding: 0 2rem 2rem 2rem; border-top: 1px solid rgba(255,255,255,0.04); margin-top: 1.5rem; padding-top: 1.5rem;">
+                    <p style="color:var(--text-dim); font-size:0.85rem; line-height:1.75; font-weight:300;">
+                        <strong style="color:var(--bone);">Nel gioco:</strong> il personaggio del <em style="color:var(--blood-bright);">Berserker</em> prende nome e filosofia proprio da questo volume. La sua resistenza psicologica agli orrori dell'occulto rispecchia il metodo descritto tra queste pagine.
+                    </p>
+                </div>
+            </article>
+
+        </div><!-- /books-grid -->
+
+        <!-- ── IN-GAME CONNECTION ──────────────────────────── -->
+        <div class="section-divider"><span>Connessioni con il Gioco</span></div>
+
+        <section class="ingame-section">
+            <p class="ingame-section-title">Li trovi nel Gioco</p>
+            <p class="ingame-section-sub">I libri reali influenzano meccaniche e lore di Strega Dony e il Berserker</p>
+
+            <div class="ingame-grid">
+                <div class="ingame-card">
+                    <span class="ingame-icon">🏛️</span>
+                    <h3>Libreria Esoterica</h3>
+                    <p>
+                        Il livello <em>Libreria Esoterica</em> custodisce copie di questi tomi tra centinaia di volumi occulti. Trovare le pagine giuste sblocca <em>conoscenze speciali</em>.
+                    </p>
+                </div>
+                <div class="ingame-card">
+                    <span class="ingame-icon">📡</span>
+                    <h3>Strumenti di Rilevazione</h3>
+                    <p>
+                        Gli strumenti nel gioco — dall'EMF all'infrarosso — sono ispirati ai <em>protocolli reali</em> descritti in Ghost Hunting Moderno. La scienza prima del paranormale.
+                    </p>
+                </div>
+                <div class="ingame-card">
+                    <span class="ingame-icon">🧠</span>
+                    <h3>Mentalità Berserker</h3>
+                    <p>
+                        La barra della <em>Sanità Mentale</em> del protagonista riflette la filosofia del secondo libro: sopravvivere all'invisibile richiede mente di ferro, non solo forza bruta.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── AUTHOR BAND ──────────────────────────────────── -->
+        <div class="section-divider"><span>L'Autore</span></div>
+
+        <div class="author-band">
+            <div class="author-avatar">✍️</div>
+            <div class="author-info">
+                <h3>Bruno Aliprandi</h3>
+                <p>
+                    Scrittore, sviluppatore indie e ricercatore del paranormale. Bruno Aliprandi ha costruito l'universo di <strong>Strega Dony e il Berserker</strong> su anni di ricerche sul campo descritte nei suoi manuali, e soprattutto sostenuto e guidato dalla <strong>Strega Dony</strong>, vera sensitiva, compagna di indagini e <strong>massima fonte di ispirazione e consiglio</strong> per la nascita dell'intera opera. I libri non sono fiction: sono <strong>procedure reali per investigatori dell'occulto</strong> — e il videogioco ne è la trasposizione interattiva.
+                </p>
+            </div>
+            <a
+                href="https://www.amazon.it/s?k=bruno+aliprandi"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="author-link"
+                id="author-amazon-link"
+            >
+                Tutti i libri su Amazon
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </a>
+        </div>
+
+    </main><!-- /libri-container -->
+
+    <script>
+        // Staggered fade-in for book cards
+        document.querySelectorAll('.book-card, .ingame-card').forEach((el, i) => {
+            el.style.animationDelay = `${i * 0.15}s`;
+        });
+
+        // Intersection Observer for scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.ingame-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(.2,.9,.3,1.1)';
+            observer.observe(card);
+        });
+
+        // Book cover click → opens Amazon in new tab
+        document.querySelectorAll('.book-cover-img').forEach(img => {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', () => {
+                const card = img.closest('.book-card');
+                const btn = card.querySelector('.amazon-btn');
+                if (btn) window.open(btn.href, '_blank', 'noopener');
+            });
+        });
+    </script>
+
+</body>
+</html>
