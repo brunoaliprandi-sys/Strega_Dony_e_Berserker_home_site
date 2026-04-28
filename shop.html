@@ -78,6 +78,7 @@
 
         .product-card:nth-child(1) { animation-delay: 0.1s; }
         .product-card:nth-child(2) { animation-delay: 0.25s; }
+        .product-card:nth-child(3) { animation-delay: 0.4s; }
 
         .product-card::before {
             content: '';
@@ -593,6 +594,59 @@
                         <div>
                             <div class="product-price-label">Prezzo</div>
                             <div class="product-price">€ 14,00</div>
+                        </div>
+                        <div style="color:var(--text-dim); font-size:0.82rem; letter-spacing:1px; margin-bottom:4px;">+ spedizione</div>
+                    </div>
+
+                    <div class="paypal-btn-wrap">
+                        <a href="#" class="paypal-btn" onclick="return false;" aria-disabled="true" tabindex="-1">
+                            <span class="paypal-logo">
+                                <span class="pp-dark">Pay</span><span class="pp-blue">Pal</span>
+                            </span>
+                            <span class="coming-soon-text">Paga con PayPal</span>
+                        </a>
+                        <a href="#notify" class="notify-link">🔔 Pre-ordina via email</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ══ PRODUCT 3: SARGATANAS ══ -->
+            <article class="product-card" id="miniatura-sargatanas">
+                <div class="product-image-wrap">
+                    <div class="img-gallery" id="gallery-sargatanas">
+                        <img src="shoponline/Miniatura_Saragatanas.png" alt="Miniatura Sargatanas" class="active">
+                        <img src="shoponline/Miniatura_Saragatanas_in_game.png" alt="Sargatanas In-Game">
+                    </div>
+                    <span class="coming-soon-badge">⚰ Coming Soon</span>
+                    <div class="product-thumbs">
+                        <button class="thumb-btn active" onclick="switchImg('gallery-sargatanas',0,this)" title="Miniatura">
+                            <img src="shoponline/Miniatura_Saragatanas.png" alt="">
+                        </button>
+                        <button class="thumb-btn" onclick="switchImg('gallery-sargatanas',1,this)" title="In-Game">
+                            <img src="shoponline/Miniatura_Saragatanas_in_game.png" alt="">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <span class="product-edition">🔥 Edizione Limitata — N.3</span>
+                    <h2 class="product-name">Sargatanas</h2>
+                    <div class="product-subtitle">Miniatura da Collezione — Resina</div>
+                    <p class="product-desc">
+                        Il demone delle anime perdute si erge imponente in questa miniatura di grande formato. Ogni piega della veste oscura, ogni corno e ogni dettaglio del volto infernale è scolpito con precisione maniacale. Una presenza minacciosa che domina qualsiasi collezione horror-fantasy.
+                    </p>
+                    <ul class="product-specs">
+                        <li>Resina di qualità premium</li>
+                        <li>Alta 11 cm</li>
+                        <li>Base scenografica inclusa</li>
+                        <li>Edizione limitata numerata</li>
+                        <li>Certificato di autenticità</li>
+                    </ul>
+
+                    <div class="product-price-row">
+                        <div>
+                            <div class="product-price-label">Prezzo</div>
+                            <div class="product-price">€ 34,00</div>
                         </div>
                         <div style="color:var(--text-dim); font-size:0.82rem; letter-spacing:1px; margin-bottom:4px;">+ spedizione</div>
                     </div>
