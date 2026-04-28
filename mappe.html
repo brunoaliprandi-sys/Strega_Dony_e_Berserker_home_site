@@ -15,6 +15,77 @@
     .npc-img-container{height:200px!important}
     .npc-img{width:100%;height:100%;object-fit:cover;max-width:100%;max-height:100%}
     .npc-card:hover .npc-img{transform:scale(1.05)}
+
+    /* ── LIGHTBOX ──────────────────────────────────────────── */
+    .npc-img { cursor: zoom-in; }
+
+    #lightbox {
+        display:none; position:fixed; inset:0; z-index:9999;
+        background:rgba(0,0,0,0.93); backdrop-filter:blur(12px);
+        align-items:center; justify-content:center; padding:2rem;
+        animation:lb-fade-in 0.3s ease forwards;
+    }
+    #lightbox.open { display:flex; }
+    @keyframes lb-fade-in { from{opacity:0} to{opacity:1} }
+
+    #lightbox-close {
+        position:fixed; top:1.4rem; right:1.8rem;
+        width:44px; height:44px; background:rgba(139,0,0,0.75);
+        border:1px solid rgba(192,57,43,0.6); border-radius:50%;
+        color:#fff; font-size:1.4rem; line-height:1; cursor:pointer;
+        display:flex; align-items:center; justify-content:center;
+        transition:background 0.25s, transform 0.2s; z-index:10000;
+    }
+    #lightbox-close:hover { background:var(--blood-bright); transform:scale(1.12) rotate(90deg); }
+
+    #lb-content { display:flex; align-items:flex-start; gap:2.5rem; max-width:88vw; max-height:86vh; }
+    #lb-img-wrap { flex:0 0 auto; display:flex; align-items:center; justify-content:center; }
+    #lightbox-img {
+        max-width:55vw; max-height:82vh; object-fit:contain; border-radius:8px;
+        box-shadow:0 0 0 1px rgba(255,255,255,0.08),
+                   0 30px 80px rgba(0,0,0,0.9),
+                   0 0 60px rgba(139,0,0,0.25);
+        transition:opacity 0.18s ease, transform 0.18s ease;
+        cursor:default; display:block;
+    }
+    #lb-info {
+        flex:1; min-width:200px; max-width:320px;
+        max-height:82vh; overflow-y:auto;
+        display:flex; flex-direction:column; gap:1.2rem; padding:0.4rem 0;
+        scrollbar-width:thin; scrollbar-color:rgba(192,57,43,0.5) transparent;
+    }
+    #lb-info::-webkit-scrollbar { width:4px; }
+    #lb-info::-webkit-scrollbar-thumb { background:rgba(192,57,43,0.5); border-radius:2px; }
+    #lb-name {
+        font-family:'Cinzel',serif; font-size:1.4rem; font-weight:900;
+        color:var(--text-bright); text-transform:uppercase;
+        letter-spacing:2px; line-height:1.1; margin:0;
+        text-shadow:0 0 30px var(--blood-glow);
+        border-bottom:1px solid rgba(139,0,0,0.35); padding-bottom:0.8rem;
+    }
+    #lb-bio  { color:var(--text-dim); font-size:0.95rem; font-weight:300; line-height:1.8; margin:0; }
+    #lb-drop { display:none; }
+
+    .lb-arrow {
+        position:fixed; top:50%; transform:translateY(-50%);
+        width:54px; height:54px; background:rgba(139,0,0,0.65);
+        border:1px solid rgba(192,57,43,0.55); border-radius:50%;
+        color:#fff; font-size:1.6rem; cursor:pointer;
+        display:flex; align-items:center; justify-content:center;
+        transition:background 0.25s, transform 0.2s; z-index:10000; line-height:1;
+    }
+    #lb-prev { left:1rem; }
+    #lb-next { right:1rem; }
+    .lb-arrow:hover { background:var(--blood-bright); transform:translateY(-50%) scale(1.12); }
+    #lb-dots { position:fixed; bottom:1.6rem; left:50%; transform:translateX(-50%); display:flex; gap:10px; z-index:10000; }
+    .lb-dot { width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,0.25); border:1px solid rgba(192,57,43,0.4); cursor:pointer; transition:background 0.25s, transform 0.2s; }
+    .lb-dot.active { background:var(--blood-bright); transform:scale(1.3); border-color:var(--blood-bright); }
+    .lb-dot:hover  { background:rgba(192,57,43,0.65); }
+    @media (max-width:700px) {
+        #lb-content  { flex-direction:column; max-width:90vw; }
+        #lightbox-img{ max-width:85vw; max-height:45vh; }
+        #lb-info     { max-width:85vw; max-height:32vh; min-width:unset; }
+    }
 </style>
 </head>
 <body>
@@ -181,9 +252,67 @@
             </div>
 
         </div>
+
+    <!-- ── LIGHTBOX OVERLAY ──────────────────────────────── -->
+    <div id="lightbox" role="dialog" aria-modal="true" aria-label="Immagine ingrandita">
+        <button id="lightbox-close" onclick="closeLightbox()" title="Chiudi (ESC)">&times;</button>
+        <button id="lb-prev" class="lb-arrow" onclick="lbNav(-1)" title="Precedente">&#8592;</button>
+        <div id="lb-content">
+            <div id="lb-img-wrap"><img id="lightbox-img" src="" alt=""></div>
+            <div id="lb-info">
+                <h3 id="lb-name"></h3>
+                <p  id="lb-bio"></p>
+                <div id="lb-drop"></div>
+            </div>
+        </div>
+        <button id="lb-next" class="lb-arrow" onclick="lbNav(1)" title="Successiva">&#8594;</button>
+        <div id="lb-dots"></div>
     </div>
+
 <script>
-document.querySelectorAll('.npc-card').forEach((c,i)=>{c.style.animationDelay=`${i*0.04}s`;});
+    document.querySelectorAll('.npc-card').forEach((c,i)=>{ c.style.animationDelay=`${i*0.04}s`; });
+    let lbImages=[], lbIndex=0;
+    function openLightbox(data) {
+        lbImages=[data]; lbIndex=0;
+        renderLbSlide();
+        document.getElementById('lightbox').classList.add('open');
+        document.body.style.overflow='hidden';
+    }
+    function renderLbSlide() {
+        const d=lbImages[lbIndex], img=document.getElementById('lightbox-img');
+        img.style.opacity='0'; img.style.transform='scale(0.93)';
+        setTimeout(()=>{ img.src=d.src; img.alt=d.alt; img.style.opacity='1'; img.style.transform='scale(1)'; },180);
+        document.getElementById('lb-name').textContent=d.name;
+        document.getElementById('lb-bio').textContent=d.bio;
+        const dropEl=document.getElementById('lb-drop');
+        if(d.drop){ dropEl.innerHTML=`<span class="lb-drop-label">${d.dropLabel}</span><span class="lb-drop-item">${d.drop}</span>`; dropEl.style.display='block'; }
+        else { dropEl.style.display='none'; }
+        document.getElementById('lb-dots').innerHTML=lbImages.map((_,i)=>`<span class="lb-dot${i===lbIndex?' active':''}" onclick="lbGoTo(${i})"></span>`).join('');
+        document.getElementById('lb-prev').style.visibility=lbImages.length>1?'visible':'hidden';
+        document.getElementById('lb-next').style.visibility=lbImages.length>1?'visible':'hidden';
+    }
+    function lbNav(dir) { lbIndex=(lbIndex+dir+lbImages.length)%lbImages.length; renderLbSlide(); }
+    function lbGoTo(i)  { lbIndex=i; renderLbSlide(); }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow='';
+        setTimeout(()=>{ document.getElementById('lightbox-img').src=''; },300);
+    }
+    document.getElementById('lightbox').addEventListener('click',function(e){ if(e.target===this) closeLightbox(); });
+    document.addEventListener('keydown',function(e){
+        if(!document.getElementById('lightbox').classList.contains('open')) return;
+        if(e.key==='Escape') closeLightbox();
+        if(e.key==='ArrowLeft') lbNav(-1);
+        if(e.key==='ArrowRight') lbNav(1);
+    });
+    document.querySelectorAll('.npc-img-container .npc-img').forEach(function(img){
+        img.addEventListener('click',function(){
+            const card=img.closest('.npc-card');
+            const name=(card?.querySelector('.npc-name')?.childNodes[0]?.textContent||'').trim();
+            const bio =(card?.querySelector('.npc-bio')?.textContent||'').trim();
+            openLightbox({src:img.getAttribute('src'),alt:img.getAttribute('alt')||'',name,bio,drop:'',dropLabel:''});
+        });
+    });
 </script>
 </body>
 </html>
