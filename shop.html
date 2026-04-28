@@ -79,6 +79,7 @@
         .product-card:nth-child(1) { animation-delay: 0.1s; }
         .product-card:nth-child(2) { animation-delay: 0.25s; }
         .product-card:nth-child(3) { animation-delay: 0.4s; }
+        .product-card:nth-child(4) { animation-delay: 0.55s; }
 
         .product-card::before {
             content: '';
@@ -458,6 +459,151 @@
             .info-band { grid-template-columns: 1fr; }
             .product-price { font-size: 2rem; }
         }
+
+        /* ── LIGHTBOX ──────────────────────────────────────── */
+        .img-gallery img { cursor: zoom-in; }
+
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            animation: lb-fade-in 0.3s ease forwards;
+        }
+
+        #lightbox.open { display: flex; }
+
+        @keyframes lb-fade-in {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+
+
+        #lightbox-close {
+            position: fixed;
+            top: 1.4rem;
+            right: 1.8rem;
+            width: 44px;
+            height: 44px;
+            background: rgba(139,0,0,0.75);
+            border: 1px solid rgba(192,57,43,0.6);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.4rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.25s, transform 0.2s;
+            z-index: 10000;
+        }
+
+        #lightbox-close:hover {
+            background: var(--blood-bright);
+            transform: scale(1.12) rotate(90deg);
+        }
+
+        #lightbox-caption {
+            position: fixed;
+            bottom: 3.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* ── Lightbox image wrapper (handles fade transition) ── */
+        #lb-img-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 90vw;
+            max-height: 88vh;
+        }
+
+        #lightbox-img {
+            max-width: 90vw;
+            max-height: 88vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.08),
+                0 30px 80px rgba(0,0,0,0.9),
+                0 0 60px rgba(139,0,0,0.25);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            cursor: default;
+            display: block;
+        }
+
+        /* ── Navigation arrows ── */
+        .lb-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 54px;
+            height: 54px;
+            background: rgba(139,0,0,0.65);
+            border: 1px solid rgba(192,57,43,0.55);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.6rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.25s, transform 0.2s;
+            z-index: 10000;
+            line-height: 1;
+        }
+
+        #lb-prev { left: 1.5rem; }
+        #lb-next { right: 1.5rem; }
+
+        .lb-arrow:hover {
+            background: var(--blood-bright);
+            transform: translateY(-50%) scale(1.12);
+        }
+
+        /* ── Dot indicators ── */
+        #lb-dots {
+            position: fixed;
+            bottom: 1.6rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10000;
+        }
+
+        .lb-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.25);
+            border: 1px solid rgba(192,57,43,0.4);
+            cursor: pointer;
+            transition: background 0.25s, transform 0.2s;
+        }
+
+        .lb-dot.active {
+            background: var(--blood-bright);
+            transform: scale(1.3);
+            border-color: var(--blood-bright);
+        }
+
+        .lb-dot:hover { background: rgba(192,57,43,0.65); }
     </style>
 </head>
 <body>
@@ -663,6 +809,59 @@
                 </div>
             </article>
 
+            <!-- ══ PRODUCT 4: ZOMBIE CIMITERO ══ -->
+            <article class="product-card" id="miniatura-zombie-cimitero">
+                <div class="product-image-wrap">
+                    <div class="img-gallery" id="gallery-zombie-cimitero">
+                        <img src="shoponline/Miniatura_Zombie_Cimitero.png" alt="Miniatura Zombie Cimitero" class="active">
+                        <img src="shoponline/Miniatura_Zombie_Cimitero_in_game.png" alt="Zombie Cimitero In-Game">
+                    </div>
+                    <span class="coming-soon-badge">⚰ Coming Soon</span>
+                    <div class="product-thumbs">
+                        <button class="thumb-btn active" onclick="switchImg('gallery-zombie-cimitero',0,this)" title="Miniatura">
+                            <img src="shoponline/Miniatura_Zombie_Cimitero.png" alt="">
+                        </button>
+                        <button class="thumb-btn" onclick="switchImg('gallery-zombie-cimitero',1,this)" title="In-Game">
+                            <img src="shoponline/Miniatura_Zombie_Cimitero_in_game.png" alt="">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <span class="product-edition">🦴 Edizione Limitata — N.4</span>
+                    <h2 class="product-name">Scheletro Cimitero</h2>
+                    <div class="product-subtitle">Miniatura da Collezione — Resina</div>
+                    <p class="product-desc">
+                        Le ossa non mentono. Lo Scheletro del Cimitero riemerge dall'oscurità eterno e silenzioso, scolpito in resina con ogni costola, ogni cranio e ogni falange fedele all'originale. Un classico horror immortalato in edizione limitata per collezionisti del macabro.
+                    </p>
+                    <ul class="product-specs">
+                        <li>Resina di qualità premium</li>
+                        <li>Alta 4 cm</li>
+                        <li>Base scenografica inclusa</li>
+                        <li>Edizione limitata numerata</li>
+                        <li>Certificato di autenticità</li>
+                    </ul>
+
+                    <div class="product-price-row">
+                        <div>
+                            <div class="product-price-label">Prezzo</div>
+                            <div class="product-price">€ 14,00</div>
+                        </div>
+                        <div style="color:var(--text-dim); font-size:0.82rem; letter-spacing:1px; margin-bottom:4px;">+ spedizione</div>
+                    </div>
+
+                    <div class="paypal-btn-wrap">
+                        <a href="#" class="paypal-btn" onclick="return false;" aria-disabled="true" tabindex="-1">
+                            <span class="paypal-logo">
+                                <span class="pp-dark">Pay</span><span class="pp-blue">Pal</span>
+                            </span>
+                            <span class="coming-soon-text">Paga con PayPal</span>
+                        </a>
+                        <a href="#notify" class="notify-link">🔔 Pre-ordina via email</a>
+                    </div>
+                </div>
+            </article>
+
         </div><!-- /products-grid -->
 
         <!-- ── INFO SECTION ──────────────────────────────── -->
@@ -729,15 +928,109 @@
 
     </main><!-- /shop-container -->
 
+    <!-- ── LIGHTBOX OVERLAY ──────────────────────────────── -->
+    <div id="lightbox" role="dialog" aria-modal="true" aria-label="Immagine ingrandita">
+        <button id="lightbox-close" onclick="closeLightbox()" title="Chiudi (ESC)">&times;</button>
+        <button id="lb-prev" class="lb-arrow" onclick="lbNav(-1)" title="Precedente">&#8592;</button>
+        <div id="lb-img-wrap">
+            <img id="lightbox-img" src="" alt="">
+        </div>
+        <button id="lb-next" class="lb-arrow" onclick="lbNav(1)" title="Successiva">&#8594;</button>
+        <div id="lightbox-caption"></div>
+        <div id="lb-dots"></div>
+    </div>
+
     <script>
+        /* ── Gallery switcher ── */
         function switchImg(galleryId, idx, btn) {
             const gallery = document.getElementById(galleryId);
             const imgs = gallery.querySelectorAll('img');
             imgs.forEach((img, i) => img.classList.toggle('active', i === idx));
-            // update thumb buttons
             const thumbs = btn.closest('.product-image-wrap').querySelectorAll('.thumb-btn');
             thumbs.forEach((t, i) => t.classList.toggle('active', i === idx));
         }
+
+        /* ── Lightbox with navigation ── */
+        let lbImages = [];   // [{src, alt}, ...] for the current card
+        let lbIndex  = 0;    // current slide index
+
+        function openLightbox(galleryEl, clickedIndex) {
+            // Collect all images from the clicked gallery
+            lbImages = Array.from(galleryEl.querySelectorAll('img')).map(img => ({
+                src: img.getAttribute('src'),
+                alt: img.getAttribute('alt') || ''
+            }));
+            lbIndex = clickedIndex;
+            renderLbSlide();
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function renderLbSlide() {
+            const img = document.getElementById('lightbox-img');
+            const cap = document.getElementById('lightbox-caption');
+            const dotsEl = document.getElementById('lb-dots');
+            const data = lbImages[lbIndex];
+
+            // Fade-swap animation
+            img.style.opacity = '0';
+            img.style.transform = 'scale(0.93)';
+            setTimeout(() => {
+                img.src = data.src;
+                img.alt = data.alt;
+                img.style.opacity = '1';
+                img.style.transform = 'scale(1)';
+            }, 180);
+
+            cap.textContent = data.alt;
+
+            // Dots
+            dotsEl.innerHTML = lbImages.map((_, i) =>
+                `<span class="lb-dot${i === lbIndex ? ' active' : ''}" onclick="lbGoTo(${i})"></span>`
+            ).join('');
+
+            // Show/hide arrows
+            document.getElementById('lb-prev').style.visibility = lbImages.length > 1 ? 'visible' : 'hidden';
+            document.getElementById('lb-next').style.visibility = lbImages.length > 1 ? 'visible' : 'hidden';
+        }
+
+        function lbNav(dir) {
+            lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+            renderLbSlide();
+        }
+
+        function lbGoTo(i) {
+            lbIndex = i;
+            renderLbSlide();
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+            setTimeout(() => { document.getElementById('lightbox-img').src = ''; }, 300);
+        }
+
+        /* Close on overlay background click */
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) closeLightbox();
+        });
+
+        /* Keyboard: ESC closes, ← → navigates */
+        document.addEventListener('keydown', function(e) {
+            if (!document.getElementById('lightbox').classList.contains('open')) return;
+            if (e.key === 'Escape')     closeLightbox();
+            if (e.key === 'ArrowLeft')  lbNav(-1);
+            if (e.key === 'ArrowRight') lbNav(1);
+        });
+
+        /* Attach click to each gallery image — pass the gallery element + index */
+        document.querySelectorAll('.img-gallery').forEach(function(gallery) {
+            gallery.querySelectorAll('img').forEach(function(img, idx) {
+                img.addEventListener('click', function() {
+                    openLightbox(gallery, idx);
+                });
+            });
+        });
     </script>
 
 </body>
