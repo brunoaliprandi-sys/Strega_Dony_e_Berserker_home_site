@@ -24,6 +24,10 @@ https://brunoaliprandi-sys.github.io/Strega_Dony_e_Berserker_home_site/
 - Mappe
 - Oggetti
 - Video
+- Libri
+- Ideatori
+- Shop
+- Wallpapers
 
 ## Nota
 
