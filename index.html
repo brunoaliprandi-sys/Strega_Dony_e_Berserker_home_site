@@ -506,7 +506,8 @@
         /* ── RESPONSIVE ───────────────────────────────────────── */
         @media (max-width: 1000px) {
             .players-section { grid-template-columns: 1fr; }
-            .sprite-panel { min-height: 400px; }
+            .sprite-panel { min-height: 550px; } /* Aumentato per iPad per contenere i personaggi grandi */
+            .stage-canvas { max-height: 450px; }
             .players-text-side { padding: 3rem 2rem; }
             .info-strip { grid-template-columns: repeat(2, 1fr); }
             .features-grid { grid-template-columns: 1fr 1fr; }
@@ -516,7 +517,8 @@
             .features-grid { grid-template-columns: 1fr; }
             .info-strip { grid-template-columns: repeat(2,1fr); }
             .hero h1 { font-size: 2.8rem; }
-            .sprite-canvas { max-height: 220px; }
+            .sprite-panel { min-height: 450px; }
+            .stage-canvas { max-height: 300px; margin-bottom: -30px; transform: scale(1.0); }
             .wasd-key { width: 38px; height: 38px; font-size: 0.75rem; }
         }
     </style>
