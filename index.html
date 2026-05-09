@@ -514,13 +514,20 @@
         }
 
         @media (max-width: 640px) {
+            .container { padding: 0 1rem 4rem; }
+            .players-section { overflow: visible; }
             .features-grid { grid-template-columns: 1fr; }
             .info-strip { grid-template-columns: repeat(2,1fr); }
             .hero h1 { font-size: 2.8rem; }
             .sprite-panel { min-height: 600px; }
             .sprite-stage { padding-top: 140px; }
-            /* Mobile bottleneck è la larghezza: scaliamo molto di più per renderli grandi e riduciamo il margin negativo */
-            .stage-canvas { max-height: 350px; margin-bottom: 0px; transform: scale(1.4); }
+            /* Mobile bottleneck: limit canvas width so 1.4 scale doesn't exceed screen, remove overflow crop */
+            .stage-canvas { 
+                max-width: calc(95vw / 1.4); 
+                max-height: 350px; 
+                margin-bottom: 0px; 
+                transform: scale(1.4); 
+            }
             .wasd-key { width: 38px; height: 38px; font-size: 0.75rem; }
         }
     </style>
