@@ -259,7 +259,7 @@
             padding-bottom: 2rem;
             background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(80,0,0,0.18) 0%, transparent 70%),
                         radial-gradient(ellipse 60% 40% at 50% 60%, rgba(20,10,30,0.5) 0%, transparent 80%);
-            overflow: hidden;
+            /* overflow rimosso per non tagliare le teste in upscale */
         }
 
         .sprite-stage {
@@ -506,8 +506,8 @@
         /* ── RESPONSIVE ───────────────────────────────────────── */
         @media (max-width: 1000px) {
             .players-section { grid-template-columns: 1fr; }
-            .sprite-panel { min-height: 550px; } /* Aumentato per iPad per contenere i personaggi grandi */
-            .stage-canvas { max-height: 450px; }
+            .sprite-panel { min-height: 650px; } /* Aumentato per iPad per contenere i personaggi grandi */
+            .stage-canvas { max-height: 450px; margin-bottom: -40px; transform: scale(1.2); }
             .players-text-side { padding: 3rem 2rem; }
             .info-strip { grid-template-columns: repeat(2, 1fr); }
             .features-grid { grid-template-columns: 1fr 1fr; }
@@ -517,8 +517,9 @@
             .features-grid { grid-template-columns: 1fr; }
             .info-strip { grid-template-columns: repeat(2,1fr); }
             .hero h1 { font-size: 2.8rem; }
-            .sprite-panel { min-height: 450px; }
-            .stage-canvas { max-height: 300px; margin-bottom: -30px; transform: scale(1.0); }
+            .sprite-panel { min-height: 500px; }
+            /* Mobile bottleneck è la larghezza: scaliamo molto di più per renderli grandi e riduciamo il margin negativo */
+            .stage-canvas { max-height: 350px; margin-bottom: 0px; transform: scale(1.4); }
             .wasd-key { width: 38px; height: 38px; font-size: 0.75rem; }
         }
     </style>
