@@ -248,28 +248,111 @@
             background: linear-gradient(90deg, transparent, var(--blood-bright), var(--accent-gold), transparent);
         }
 
-        .players-img-side {
+        /* ── SPRITE ANIMATION PANEL ───────────────────────────── */
+        .sprite-panel {
             position: relative;
-            min-height: 600px;
+            min-height: 720px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 2rem;
+            background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(80,0,0,0.18) 0%, transparent 70%),
+                        radial-gradient(ellipse 60% 40% at 50% 60%, rgba(20,10,30,0.5) 0%, transparent 80%);
             overflow: hidden;
         }
 
-        .players-img-side img {
-            position: absolute;
-            inset: 0;
+        .sprite-stage {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1;
+            flex: 1;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center top;
-            filter: saturate(0.85);
+            padding-top: 2rem;
+            overflow: hidden;
         }
 
-        .players-img-side::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, transparent 60%, rgba(10,8,12,0.9) 100%),
-                        linear-gradient(to top, rgba(3,3,5,0.6) 0%, transparent 40%);
+        .stage-canvas {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            display: block;
+            max-height: 540px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
+        }
+
+        /* ── WASD CONTROLLER ──────────────────────────────────── */
+        .wasd-controller {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin-top: 1.2rem;
+        }
+
+        .wasd-row {
+            display: flex;
+            gap: 4px;
+        }
+
+        .wasd-key {
+            width: 44px;
+            height: 44px;
+            background: rgba(20,15,25,0.85);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-bottom: 3px solid rgba(255,255,255,0.06);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.12s;
+            user-select: none;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        .wasd-key:hover {
+            color: var(--text-bright);
+            border-color: rgba(192,57,43,0.5);
+            background: rgba(40,15,20,0.9);
+            box-shadow: 0 4px 16px rgba(139,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .wasd-key.active {
+            background: rgba(100,0,0,0.6);
+            border-color: var(--blood-bright);
+            color: #fff;
+            transform: translateY(2px);
+            border-bottom-width: 1px;
+            box-shadow: 0 0 20px rgba(192,57,43,0.4), inset 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .wasd-key svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .wasd-hint {
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.25);
+            margin-top: 0.5rem;
         }
 
         .players-text-side {
@@ -420,8 +503,7 @@
         /* ── RESPONSIVE ───────────────────────────────────────── */
         @media (max-width: 1000px) {
             .players-section { grid-template-columns: 1fr; }
-            .players-img-side { min-height: 350px; }
-            .players-img-side::after { background: linear-gradient(to top, rgba(10,8,12,0.9) 0%, transparent 60%); }
+            .sprite-panel { min-height: 400px; }
             .players-text-side { padding: 3rem 2rem; }
             .info-strip { grid-template-columns: repeat(2, 1fr); }
             .features-grid { grid-template-columns: 1fr 1fr; }
@@ -431,6 +513,8 @@
             .features-grid { grid-template-columns: 1fr; }
             .info-strip { grid-template-columns: repeat(2,1fr); }
             .hero h1 { font-size: 2.8rem; }
+            .sprite-canvas { max-height: 220px; }
+            .wasd-key { width: 38px; height: 38px; font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -491,9 +575,35 @@
 
         <!-- PLAYERS -->
         <section class="players-section">
-            <div class="players-img-side">
-                <img src="images/Dony_Berserker.png" alt="Strega Dony e il Berserker">
+
+            <!-- SPRITE ANIMATION PANEL -->
+            <div class="sprite-panel" id="spritePanel">
+                <div class="sprite-stage">
+                    <canvas id="stageCanvas" class="stage-canvas" aria-label="Dony e Berserker animati"></canvas>
+                </div>
+
+                <!-- WASD Controller -->
+                <div class="wasd-controller">
+                    <div class="wasd-row">
+                        <div class="wasd-key" id="key-w" data-dir="n" title="Nord">
+                            <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+                        </div>
+                    </div>
+                    <div class="wasd-row">
+                        <div class="wasd-key" id="key-a" data-dir="w" title="Ovest">
+                            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                        </div>
+                        <div class="wasd-key" id="key-s" data-dir="s" title="Sud">
+                            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="wasd-key" id="key-d" data-dir="e" title="Est">
+                            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                        </div>
+                    </div>
+                    <p class="wasd-hint">↑ W A S D — cambia direzione</p>
+                </div>
             </div>
+
             <div class="players-text-side">
                 <div class="player-entry">
                     <h2 class="player-name">
@@ -604,7 +714,7 @@
     </main>
 
     <script>
-        // Blood drip particles
+        // ── Blood drip particles ──────────────────────────────────
         const container = document.getElementById('particles');
         for (let i = 0; i < 20; i++) {
             const p = document.createElement('div');
@@ -627,6 +737,212 @@
         document.querySelectorAll('.npc-card').forEach((c, i) => {
             c.style.animationDelay = `${i * 0.04}s`;
         });
+
+        // ── Sprite Animation Engine — single shared canvas ───────────
+        (function () {
+            const TOTAL_FRAMES = 36;
+            const FPS          = 8;
+            const FRAME_MS     = 1000 / FPS;
+            const DIRS         = ['n', 's', 'e', 'w'];
+            const DIR_KEY_MAP  = { w: 'n', s: 's', a: 'w', d: 'e' };
+            const SHADOW_H     = 20; // px reserved at bottom for ground shadow
+
+            const canvas = document.getElementById('stageCanvas');
+            const ctx    = canvas.getContext('2d');
+            const cache  = { Dony: {}, Berserker: {} };
+
+            // max dims per character (set after preload)
+            let maxDW = 0, maxDH = 0, maxBW = 0, maxBH = 0;
+            // transparent bottom-padding per char per dir (px to add to dy/by)
+            const footOffset = { Dony: {}, Berserker: {} };
+
+            let currentDir   = 's';
+            let currentFrame = 0;
+            let lastTime     = null;
+            let animId       = null;
+
+            function framePath(char, dir, frame) {
+                return `animazioni/${char}/${dir}/frame_${String(frame).padStart(4,'0')}.png`;
+            }
+
+            // Scan from bottom of a bitmap to find the lowest non-transparent row.
+            // Returns bmp.height-1 as safe fallback if pixel read fails (SecurityError).
+            function findFootY(bmp) {
+                try {
+                    const oc = document.createElement('canvas');
+                    oc.width = bmp.width; oc.height = bmp.height;
+                    const ox = oc.getContext('2d', { willReadFrequently: true });
+                    ox.drawImage(bmp, 0, 0);
+                    const data = ox.getImageData(0, 0, bmp.width, bmp.height).data;
+                    for (let y = bmp.height - 1; y >= 0; y--) {
+                        for (let x = 0; x < bmp.width; x++) {
+                            if (data[(y * bmp.width + x) * 4 + 3] > 8) return y;
+                        }
+                    }
+                    return bmp.height - 1;
+                } catch (e) {
+                    return bmp.height - 1; // no correction on error
+                }
+            }
+
+            function drawShadow(cx, rx) {
+                const y = canvas.height - 4;
+                const grad = ctx.createRadialGradient(cx, y, 0, cx, y, rx);
+                grad.addColorStop(0, 'rgba(0,0,0,0.45)');
+                grad.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.save();
+                ctx.scale(1, 0.25);          // flatten ellipse
+                ctx.beginPath();
+                ctx.arc(cx, y * 4, rx, 0, Math.PI * 2);
+                ctx.fillStyle = grad;
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // Manual tuning for specific directions where the raw PNG sizes/positions don't match visually
+            const manualTuning = {
+                Dony: {
+                    s: { scale: 0.93, dy: 0, dx: 40 },
+                    n: { scale: 1.0, dy: -20, dx: 40 }, // shift up
+                    e: { scale: 0.92, dy: 0, dx: 40 },
+                    w: { scale: 0.92, dy: 0, dx: 40 }
+                },
+                Berserker: {
+                    s: { scale: 1.0, dy: 0, dx: -40 },
+                    n: { scale: 1.0, dy: 0, dx: -40 },
+                    e: { scale: 0.92, dy: 0, dx: -40 },
+                    w: { scale: 0.92, dy: 0, dx: -40 }
+                }
+            };
+
+            function drawFrame(dir, frame) {
+                const dBmp = cache.Dony[dir][frame];
+                const bBmp = cache.Berserker[dir][frame];
+                if (!dBmp || !bBmp) return;
+
+                const W = canvas.width;
+                const H = canvas.height;
+                const baseline = H - SHADOW_H; // feet sit on this line
+
+                ctx.clearRect(0, 0, W, H);
+
+                // Ground shadows (drawn before characters so they appear behind)
+                const dCX = Math.floor(maxDW / 2) + manualTuning.Dony[dir].dx;
+                const bCX = maxDW + Math.floor(maxBW / 2) + manualTuning.Berserker[dir].dx;
+                drawShadow(dCX, dBmp.width * 0.38 * manualTuning.Dony[dir].scale);
+                drawShadow(bCX, bBmp.width * 0.38 * manualTuning.Berserker[dir].scale);
+
+                // Dony
+                const dt = manualTuning.Dony[dir];
+                const dw = dBmp.width * dt.scale;
+                const dh = dBmp.height * dt.scale;
+                const dx = Math.floor((maxDW - dw) / 2) + dt.dx;
+                const dy = baseline - dh + footOffset.Dony[dir] * dt.scale + dt.dy;
+                ctx.drawImage(dBmp, dx, dy, dw, dh);
+
+                // Berserker
+                const bt = manualTuning.Berserker[dir];
+                const bw = bBmp.width * bt.scale;
+                const bh = bBmp.height * bt.scale;
+                const bx = maxDW + Math.floor((maxBW - bw) / 2) + bt.dx;
+                const by = baseline - bh + footOffset.Berserker[dir] * bt.scale + bt.dy;
+                ctx.drawImage(bBmp, bx, by, bw, bh);
+            }
+
+            function animLoop(ts) {
+                if (lastTime === null) lastTime = ts;
+                while (ts - lastTime >= FRAME_MS) {
+                    lastTime += FRAME_MS;
+                    currentFrame = (currentFrame + 1) % TOTAL_FRAMES;
+                }
+                drawFrame(currentDir, currentFrame);
+                animId = requestAnimationFrame(animLoop);
+            }
+
+            function startAnim() {
+                if (animId) cancelAnimationFrame(animId);
+                lastTime = null; currentFrame = 0;
+                drawFrame(currentDir, 0);
+                animId = requestAnimationFrame(animLoop);
+            }
+
+            function changeDir(newDir) {
+                if (currentDir === newDir) return;
+                currentDir = newDir; currentFrame = 0; lastTime = null;
+            }
+
+            function loadImageBitmap(src) {
+                return new Promise(resolve => {
+                    const img = new Image();
+                    img.onload = () => {
+                        if (typeof createImageBitmap !== 'undefined')
+                            createImageBitmap(img).then(resolve).catch(() => resolve(img));
+                        else resolve(img);
+                    };
+                    img.onerror = () => resolve(null);
+                    img.src = src;
+                });
+            }
+
+            async function preload() {
+                const tasks = [];
+                DIRS.forEach(dir => {
+                    cache.Dony[dir]      = new Array(TOTAL_FRAMES);
+                    cache.Berserker[dir] = new Array(TOTAL_FRAMES);
+                    for (let f = 0; f < TOTAL_FRAMES; f++) {
+                        ['Dony','Berserker'].forEach(char => {
+                            const fi=f, ch=char, d=dir;
+                            tasks.push(loadImageBitmap(framePath(ch,d,fi)).then(bmp => { cache[ch][d][fi]=bmp; }));
+                        });
+                    }
+                });
+                await Promise.all(tasks);
+
+                // Max dimensions across all directions
+                DIRS.forEach(dir => {
+                    cache.Dony[dir].forEach(b => { if(b){ maxDW=Math.max(maxDW,b.width); maxDH=Math.max(maxDH,b.height); }});
+                    cache.Berserker[dir].forEach(b => { if(b){ maxBW=Math.max(maxBW,b.width); maxBH=Math.max(maxBH,b.height); }});
+                });
+
+                // Compute foot offsets: transparent px below the last opaque row per dir
+                // Pre-init all to 0 so animation starts even if pixel read fails
+                DIRS.forEach(dir => { footOffset.Dony[dir] = 0; footOffset.Berserker[dir] = 0; });
+                try {
+                    DIRS.forEach(dir => {
+                        const df = cache.Dony[dir][0];
+                        const bf = cache.Berserker[dir][0];
+                        if (df) footOffset.Dony[dir]      = df.height - 1 - findFootY(df);
+                        if (bf) footOffset.Berserker[dir] = bf.height - 1 - findFootY(bf);
+                    });
+                } catch(e) { /* keep zeros on any unexpected error */ }
+
+                // Combined canvas: side-by-side, same baseline
+                canvas.width  = maxDW + maxBW;
+                canvas.height = Math.max(maxDH, maxBH) + SHADOW_H;
+
+                startAnim();
+            }
+
+            document.querySelectorAll('.wasd-key').forEach(btn => {
+                const activate = () => { changeDir(btn.dataset.dir); updateActiveKey(btn.dataset.dir); };
+                btn.addEventListener('click', activate);
+                btn.addEventListener('touchstart', e => { e.preventDefault(); activate(); }, { passive: false });
+            });
+
+            document.addEventListener('keydown', e => {
+                const k = e.key.toLowerCase();
+                if (DIR_KEY_MAP[k]) { e.preventDefault(); const d=DIR_KEY_MAP[k]; changeDir(d); updateActiveKey(d); }
+            });
+
+            function updateActiveKey(dir) {
+                const m = { n:'key-w', s:'key-s', w:'key-a', e:'key-d' };
+                document.querySelectorAll('.wasd-key').forEach(b => b.classList.remove('active'));
+                const el = document.getElementById(m[dir]); if (el) el.classList.add('active');
+            }
+
+            updateActiveKey('s');
+            preload();
+        })();
     </script>
 
 </body>
