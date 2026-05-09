@@ -888,27 +888,33 @@
             }
 
             async function preload() {
-                const tasks = [];
+                // Initialize cache arrays
                 DIRS.forEach(dir => {
                     cache.Dony[dir]      = new Array(TOTAL_FRAMES);
                     cache.Berserker[dir] = new Array(TOTAL_FRAMES);
-                    for (let f = 0; f < TOTAL_FRAMES; f++) {
-                        ['Dony','Berserker'].forEach(char => {
-                            const fi=f, ch=char, d=dir;
-                            tasks.push(loadImageBitmap(framePath(ch,d,fi)).then(bmp => { cache[ch][d][fi]=bmp; }));
-                        });
-                    }
                 });
-                await Promise.all(tasks);
 
-                // Max dimensions across all directions
+                // Phase 1: Load ONLY frame 0 for all directions first
+                const initialTasks = [];
                 DIRS.forEach(dir => {
-                    cache.Dony[dir].forEach(b => { if(b){ maxDW=Math.max(maxDW,b.width); maxDH=Math.max(maxDH,b.height); }});
-                    cache.Berserker[dir].forEach(b => { if(b){ maxBW=Math.max(maxBW,b.width); maxBH=Math.max(maxBH,b.height); }});
+                    ['Dony','Berserker'].forEach(char => {
+                        initialTasks.push(
+                            loadImageBitmap(framePath(char, dir, 0)).then(bmp => { cache[char][dir][0] = bmp; })
+                        );
+                    });
+                });
+                await Promise.all(initialTasks);
+
+                // Phase 2: Compute dimensions and setup from frame 0
+                // (Idle animation frames from same export share identical canvas dimensions)
+                DIRS.forEach(dir => {
+                    const df = cache.Dony[dir][0];
+                    const bf = cache.Berserker[dir][0];
+                    if(df){ maxDW=Math.max(maxDW,df.width); maxDH=Math.max(maxDH,df.height); }
+                    if(bf){ maxBW=Math.max(maxBW,bf.width); maxBH=Math.max(maxBH,bf.height); }
                 });
 
-                // Compute foot offsets: transparent px below the last opaque row per dir
-                // Pre-init all to 0 so animation starts even if pixel read fails
+                // Compute foot offsets
                 DIRS.forEach(dir => { footOffset.Dony[dir] = 0; footOffset.Berserker[dir] = 0; });
                 try {
                     DIRS.forEach(dir => {
@@ -923,7 +929,17 @@
                 canvas.width  = maxDW + maxBW;
                 canvas.height = Math.max(maxDH, maxBH) + SHADOW_H;
 
+                // Start the animation loop immediately so characters appear on screen instantly
                 startAnim();
+
+                // Phase 3: Lazy load the remaining frames in the background
+                DIRS.forEach(dir => {
+                    for (let f = 1; f < TOTAL_FRAMES; f++) {
+                        ['Dony','Berserker'].forEach(char => {
+                            loadImageBitmap(framePath(char, dir, f)).then(bmp => { cache[char][dir][f] = bmp; });
+                        });
+                    }
+                });
             }
 
             document.querySelectorAll('.wasd-key').forEach(btn => {
