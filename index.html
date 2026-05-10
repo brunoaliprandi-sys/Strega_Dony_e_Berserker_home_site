@@ -530,9 +530,42 @@
             }
             .wasd-key { width: 38px; height: 38px; font-size: 0.75rem; }
         }
+
+        /* ── SUORA NERA — scroll-driven sprite, right edge ────────── */
+        #suora-nera-sprite {
+            position: fixed;
+            right: 0;
+            /* centrata verticalmente così è sempre completamente visibile */
+            top: 50%;
+            transform: translateY(-50%) translateX(115%);
+            z-index: 8888;
+            pointer-events: none;
+            /* altezza contenuta: massimo 28vh, min 140px */
+            height: clamp(420px, 75vh, 900px);
+            width: auto;
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity  0.4s ease;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            filter: drop-shadow(-8px 0 20px rgba(60,0,0,0.6))
+                    drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+        }
+        #suora-nera-sprite.sn-visible {
+            transform: translateY(-50%) translateX(0%);
+            opacity: 1;
+        }
+        @media (max-width: 640px) {
+            #suora-nera-sprite {
+                height: clamp(330px, 65vh, 600px);
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- ── SUORA NERA — scroll sprite right edge ────────────────── -->
+    <canvas id="suora-nera-sprite" aria-hidden="true"></canvas>
 
     <!-- ── NAV ──────────────────────────────────────────────── -->
     <nav>
@@ -973,6 +1006,101 @@
             updateActiveKey('s');
             preload();
         })();
+
+        // ── SUORA NERA — scroll-driven, single pass, locked to players-section ──
+        (function () {
+            const FRAMES_START = 25;
+            const FRAMES_END   = 43;
+            const TOTAL        = FRAMES_END - FRAMES_START + 1; // 19 frames
+            const BASE_PATH    = 'animazioni/suora_nera_appare/';
+
+            const el  = document.getElementById('suora-nera-sprite');
+            const ctx = el.getContext('2d');
+
+            // ─ Preload frames ─────────────────────────────────────────
+            const frames = new Array(TOTAL).fill(null);
+            let naturalW = 0, naturalH = 0;
+
+            function pad(n) { return String(n).padStart(4, '0'); }
+
+            for (let i = 0; i < TOTAL; i++) {
+                const img = new Image();
+                img.src = BASE_PATH + 'frame_' + pad(FRAMES_START + i) + '.png';
+                img.onload = (function (idx, im) {
+                    return function () {
+                        frames[idx] = im;
+                        if (!naturalW && im.naturalWidth) {
+                            naturalW = im.naturalWidth;
+                            naturalH = im.naturalHeight;
+                            el.width  = naturalW;
+                            el.height = naturalH;
+                        }
+                        if (idx === 0) renderFrame(0);
+                    };
+                })(i, img);
+            }
+
+            // ─ Render a specific frame ────────────────────────────────
+            let lastDrawn = -1;
+            function renderFrame(idx) {
+                if (idx === lastDrawn) return;
+                const bmp = frames[idx];
+                if (!bmp) return;
+                if (naturalW && el.width !== naturalW) { el.width = naturalW; el.height = naturalH; }
+                ctx.clearRect(0, 0, el.width, el.height);
+                ctx.drawImage(bmp, 0, 0);
+                lastDrawn = idx;
+            }
+
+            // ─ Scroll logic ───────────────────────────────────────────
+            // Zone = exactly the players-section element
+            const playersSec = document.querySelector('.players-section');
+            let isVisible = false;
+
+            function onScroll() {
+                if (!playersSec) return;
+                const rect = playersSec.getBoundingClientRect();
+                const vh   = window.innerHeight;
+
+                // Section is "in view" when its top has entered the screen
+                // and its bottom hasn't left yet
+                const inZone = rect.top < vh * 0.9 && rect.bottom > vh * 0.1;
+
+                // ─ Show / hide ─
+                if (inZone && !isVisible) {
+                    isVisible = true;
+                    el.classList.add('sn-visible');
+                }
+                if (!inZone && isVisible) {
+                    isVisible = false;
+                    el.classList.remove('sn-visible');
+                }
+
+                // ─ Map section scroll progress → frame (single pass, no cycle) ─
+                if (inZone) {
+                    // progress 0 = section top at bottom of viewport
+                    // progress 1 = section bottom at top of viewport
+                    const totalTravel = rect.height + vh;
+                    const traveled    = vh * 0.9 - rect.top;
+                    const progress    = Math.max(0, Math.min(1, traveled / totalTravel));
+                    // Single linear pass: frame 0 at entry, frame 18 at exit
+                    const frameIdx = Math.min(TOTAL - 1, Math.floor(progress * TOTAL));
+                    renderFrame(frameIdx);
+                }
+            }
+
+            // rAF-throttled scroll listener
+            let rafPending = false;
+            window.addEventListener('scroll', function () {
+                if (!rafPending) {
+                    rafPending = true;
+                    requestAnimationFrame(function () { onScroll(); rafPending = false; });
+                }
+            }, { passive: true });
+
+            onScroll();
+        })();
+
     </script>
 
 </body>
