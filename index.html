@@ -555,6 +555,13 @@
             transform: translateY(-50%) translateX(0%);
             opacity: 1;
         }
+        /* Tablet (iPad): ridotta a circa metà — PC rimane invariato */
+        @media (min-width: 641px) and (max-width: 1024px) {
+            #suora-nera-sprite {
+                height: clamp(180px, 32vh, 360px);
+            }
+        }
+        /* Mobile */
         @media (max-width: 640px) {
             #suora-nera-sprite {
                 height: clamp(330px, 65vh, 600px);
