@@ -535,27 +535,24 @@
         #suora-nera-sprite {
             position: fixed;
             right: 0;
-            /* centrata verticalmente così è sempre completamente visibile */
+            /* centrata verticalmente */
             top: 50%;
-            transform: translateY(-50%) translateX(115%);
+            /* transform controllata via JS — nessuna transition qui per evitare conflitti */
+            transform: translateY(-50%) translateX(110%);
             z-index: 8888;
             pointer-events: none;
-            /* altezza contenuta: massimo 28vh, min 140px */
             height: clamp(420px, 75vh, 900px);
             width: auto;
             opacity: 0;
-            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-                        opacity  0.4s ease;
+            /* transizione morbida per position e opacity */
+            transition: transform 0.18s linear,
+                        opacity  0.18s linear;
             image-rendering: pixelated;
             image-rendering: crisp-edges;
             filter: drop-shadow(-8px 0 20px rgba(60,0,0,0.6))
                     drop-shadow(0 4px 12px rgba(0,0,0,0.8));
         }
-        #suora-nera-sprite.sn-visible {
-            transform: translateY(-50%) translateX(0%);
-            opacity: 1;
-        }
-        /* Tablet (iPad): ridotta a circa metà — PC rimane invariato */
+        /* Tablet (iPad) */
         @media (min-width: 641px) and (max-width: 1024px) {
             #suora-nera-sprite {
                 height: clamp(180px, 32vh, 360px);
@@ -1014,17 +1011,23 @@
             preload();
         })();
 
-        // ── SUORA NERA — scroll-driven, single pass, locked to players-section ──
+        // ── SUORA NERA — scroll-driven, frame-position sincroni ──────
         (function () {
-            const FRAMES_START = 25;
-            const FRAMES_END   = 43;
-            const TOTAL        = FRAMES_END - FRAMES_START + 1; // 19 frames
+            // Frame disponibili nella cartella: 0027 → 0041 (15 frame)
+            const FRAMES_START = 27;
+            const FRAMES_END   = 41;
+            const TOTAL        = FRAMES_END - FRAMES_START + 1; // 15 frame
             const BASE_PATH    = 'animazioni/suora_nera_appare/';
+
+            // Quanti frame di "entrata" e "uscita" (slide da/verso il bordo destro)
+            // I restanti frame centrali la mostrano completamente visibile.
+            const SLIDE_IN_FRAMES  = 4;  // frame 0–3:  entra da destra
+            const SLIDE_OUT_FRAMES = 4;  // frame 11–14: esce verso destra
 
             const el  = document.getElementById('suora-nera-sprite');
             const ctx = el.getContext('2d');
 
-            // ─ Preload frames ─────────────────────────────────────────
+            // ─ Preload frames ──────────────────────────────────────────
             const frames = new Array(TOTAL).fill(null);
             let naturalW = 0, naturalH = 0;
 
@@ -1042,12 +1045,12 @@
                             el.width  = naturalW;
                             el.height = naturalH;
                         }
-                        if (idx === 0) renderFrame(0);
+                        if (idx === 0) applyFrameVisual(0);
                     };
                 })(i, img);
             }
 
-            // ─ Render a specific frame ────────────────────────────────
+            // ─ Disegna un frame sul canvas ─────────────────────────────
             let lastDrawn = -1;
             function renderFrame(idx) {
                 if (idx === lastDrawn) return;
@@ -1059,41 +1062,65 @@
                 lastDrawn = idx;
             }
 
-            // ─ Scroll logic ───────────────────────────────────────────
-            // Zone = exactly the players-section element
+            // ─ Aggiorna frame + posizione CSS in modo coordinato ───────
+            // slideX: 0 = completamente visibile, 100 = fuori schermo a destra
+            // opacity: 0 nascosta, 1 visibile
+            function applyFrameVisual(idx) {
+                renderFrame(idx);
+
+                let slideX, opacity;
+
+                if (idx < SLIDE_IN_FRAMES) {
+                    // Entrata: scivola da 100% a 0%
+                    const t = idx / SLIDE_IN_FRAMES;          // 0→1
+                    slideX  = (1 - easeOut(t)) * 100;         // 100→0
+                    opacity = easeOut(t);                      // 0→1
+                } else if (idx >= TOTAL - SLIDE_OUT_FRAMES) {
+                    // Uscita: scivola da 0% a 100%
+                    const t = (idx - (TOTAL - SLIDE_OUT_FRAMES)) / SLIDE_OUT_FRAMES; // 0→1
+                    slideX  = easeIn(t) * 100;                // 0→100
+                    opacity = 1 - easeIn(t);                  // 1→0
+                } else {
+                    // Piena visibilità
+                    slideX  = 0;
+                    opacity = 1;
+                }
+
+                el.style.transform = `translateY(-50%) translateX(${slideX.toFixed(1)}%)`;
+                el.style.opacity   = opacity.toFixed(3);
+            }
+
+            function easeOut(t) { return 1 - Math.pow(1 - t, 2); }
+            function easeIn(t)  { return t * t; }
+
+            // ─ Scroll logic ────────────────────────────────────────────
             const playersSec = document.querySelector('.players-section');
-            let isVisible = false;
 
             function onScroll() {
                 if (!playersSec) return;
                 const rect = playersSec.getBoundingClientRect();
                 const vh   = window.innerHeight;
 
-                // Section is "in view" when its top has entered the screen
-                // and its bottom hasn't left yet
+                // La sezione è in zona se è parzialmente visibile
                 const inZone = rect.top < vh * 0.9 && rect.bottom > vh * 0.1;
 
-                // ─ Show / hide ─
-                if (inZone && !isVisible) {
-                    isVisible = true;
-                    el.classList.add('sn-visible');
-                }
-                if (!inZone && isVisible) {
-                    isVisible = false;
-                    el.classList.remove('sn-visible');
+                if (!inZone) {
+                    // Nasconde completamente fuori zona
+                    el.style.transform = 'translateY(-50%) translateX(110%)';
+                    el.style.opacity   = '0';
+                    lastDrawn = -1; // forza ridisegno alla prossima entrata
+                    return;
                 }
 
-                // ─ Map section scroll progress → frame (single pass, no cycle) ─
-                if (inZone) {
-                    // progress 0 = section top at bottom of viewport
-                    // progress 1 = section bottom at top of viewport
-                    const totalTravel = rect.height + vh;
-                    const traveled    = vh * 0.9 - rect.top;
-                    const progress    = Math.max(0, Math.min(1, traveled / totalTravel));
-                    // Single linear pass: frame 0 at entry, frame 18 at exit
-                    const frameIdx = Math.min(TOTAL - 1, Math.floor(progress * TOTAL));
-                    renderFrame(frameIdx);
-                }
+                // Progresso 0 = sezione appena entrata in basso;
+                // Progresso 1 = sezione uscita in alto
+                const totalTravel = rect.height + vh;
+                const traveled    = vh * 0.9 - rect.top;
+                const progress    = Math.max(0, Math.min(1, traveled / totalTravel));
+
+                // Mappa il progresso ai frame disponibili
+                const frameIdx = Math.min(TOTAL - 1, Math.floor(progress * TOTAL));
+                applyFrameVisual(frameIdx);
             }
 
             // rAF-throttled scroll listener
