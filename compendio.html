@@ -121,9 +121,39 @@
         #lightbox-img{ max-width:85vw; max-height:45vh; }
         #lb-info     { max-width:85vw; max-height:32vh; min-width:unset; }
     }
+
+    /* ── JOSEF_M — scroll-driven sprite, left edge ──────────── */
+    #josef-m-sprite {
+        position: fixed;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%) translateX(-110%);
+        z-index: 8888;
+        pointer-events: none;
+        height: clamp(420px, 75vh, 900px);
+        width: auto;
+        opacity: 0;
+        transition: transform 0.18s linear,
+                    opacity  0.18s linear;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        filter: drop-shadow(8px 0 20px rgba(60,0,0,0.6))
+                drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+    }
+    /* Tablet */
+    @media (min-width: 641px) and (max-width: 1024px) {
+        #josef-m-sprite { height: clamp(180px, 32vh, 360px); }
+    }
+    /* Mobile */
+    @media (max-width: 640px) {
+        #josef-m-sprite { height: clamp(330px, 65vh, 600px); }
+    }
 </style>
 </head>
 <body>
+
+    <!-- ── JOSEF M — scroll sprite left edge ─────────────────── -->
+    <canvas id="josef-m-sprite" aria-hidden="true"></canvas>
 
     <!-- Navigazione -->
         <nav>
@@ -613,6 +643,117 @@
 
     <script>
         document.querySelectorAll('.npc-card').forEach((c,i)=>{ c.style.animationDelay=`${i*0.04}s`; });
+
+        // ── JOSEF M — scroll-driven, frame-position sincroni ──────
+        (function () {
+            // Frame disponibili: 0000 → 0035 (36 frame)
+            const FRAMES_START = 0;
+            const FRAMES_END   = 35;
+            const TOTAL        = FRAMES_END - FRAMES_START + 1; // 36 frame
+            const BASE_PATH    = 'animazioni/Josef_M/';
+
+            const SLIDE_IN_FRAMES  = 5;  // frame 0–4:  entra da destra
+            const SLIDE_OUT_FRAMES = 5;  // frame 31–35: esce verso destra
+
+            const el  = document.getElementById('josef-m-sprite');
+            const ctx = el.getContext('2d');
+
+            // ─ Preload frames ──────────────────────────────────────
+            const frames = new Array(TOTAL).fill(null);
+            let naturalW = 0, naturalH = 0;
+
+            function pad(n) { return String(n).padStart(4, '0'); }
+
+            for (let i = 0; i < TOTAL; i++) {
+                const img = new Image();
+                img.src = BASE_PATH + 'frame_' + pad(FRAMES_START + i) + '.png';
+                img.onload = (function (idx, im) {
+                    return function () {
+                        frames[idx] = im;
+                        if (!naturalW && im.naturalWidth) {
+                            naturalW = im.naturalWidth;
+                            naturalH = im.naturalHeight;
+                            el.width  = naturalW;
+                            el.height = naturalH;
+                        }
+                        if (idx === 0) applyFrameVisual(0);
+                    };
+                })(i, img);
+            }
+
+            // ─ Disegna un frame sul canvas ─────────────────────────
+            let lastDrawn = -1;
+            function renderFrame(idx) {
+                if (idx === lastDrawn) return;
+                const bmp = frames[idx];
+                if (!bmp) return;
+                if (naturalW && el.width !== naturalW) { el.width = naturalW; el.height = naturalH; }
+                ctx.clearRect(0, 0, el.width, el.height);
+                ctx.drawImage(bmp, 0, 0);
+                lastDrawn = idx;
+            }
+
+            // ─ Aggiorna frame + posizione CSS ──────────────────────
+            // slideX: 0 = visibile, -100 = fuori schermo a sinistra
+            function applyFrameVisual(idx) {
+                renderFrame(idx);
+
+                let slideX, opacity;
+
+                if (idx < SLIDE_IN_FRAMES) {
+                    // Entrata: scivola da -100% a 0%
+                    const t = idx / SLIDE_IN_FRAMES;
+                    slideX  = -(1 - easeOut(t)) * 100;
+                    opacity = easeOut(t);
+                } else if (idx >= TOTAL - SLIDE_OUT_FRAMES) {
+                    // Uscita: scivola da 0% a -100%
+                    const t = (idx - (TOTAL - SLIDE_OUT_FRAMES)) / SLIDE_OUT_FRAMES;
+                    slideX  = -easeIn(t) * 100;
+                    opacity = 1 - easeIn(t);
+                } else {
+                    // Piena visibilità
+                    slideX  = 0;
+                    opacity = 1;
+                }
+
+                el.style.transform = `translateY(-50%) translateX(${slideX.toFixed(1)}%)`;
+                el.style.opacity   = opacity.toFixed(3);
+            }
+
+            function easeOut(t) { return 1 - Math.pow(1 - t, 2); }
+            function easeIn(t)  { return t * t; }
+
+            // ─ Scroll logic — visibile per tutta la pagina ────────
+            function onScroll() {
+                const scrollY   = window.scrollY || window.pageYOffset;
+                const maxScroll = Math.max(1,
+                    document.documentElement.scrollHeight - window.innerHeight);
+
+                const progress = Math.max(0, Math.min(1, scrollY / maxScroll));
+
+                // Forza uscita completa al fondo della pagina
+                if (progress >= 0.99) {
+                    el.style.transform = 'translateY(-50%) translateX(-110%)';
+                    el.style.opacity   = '0';
+                    return;
+                }
+
+                // 36 frame distribuiti su tutta la pagina
+                const frameIdx = Math.min(TOTAL - 1, Math.floor(progress * TOTAL));
+                applyFrameVisual(frameIdx);
+            }
+
+            // rAF-throttled scroll listener
+            let rafPending = false;
+            window.addEventListener('scroll', function () {
+                if (!rafPending) {
+                    rafPending = true;
+                    requestAnimationFrame(function () { onScroll(); rafPending = false; });
+                }
+            }, { passive: true });
+
+            onScroll();
+        })();
 
         let lbImages=[], lbIndex=0;
 
